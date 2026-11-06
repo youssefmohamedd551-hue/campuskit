@@ -1,0 +1,1337 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>CampusKit</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: navy + white + light teal; sticky nav, single-page views, item art drawn as inline illustrations on category-tinted plates */
+:root{
+  --bg:#fffaf3; --surface:#ffffff; --ink:#2b3a4f; --muted:#5d6e82; --line:#eee4d6;
+  --navy:#9ad3ec; --navy-ink:#1f3550; --band:#e6f4fa; --band-ink:#2b3a4f; --band-muted:#586a7f;
+  --teal:#c4eadf; --teal-soft:#e9f7f1; --teal-ink:#1d7a77; --focus:#3a9fc4;
+  --peach:#ffc9b0; --peach-soft:#fff0e8; --peach-ink:#a4472b;
+  --tint-medical:#e4f6f0; --tint-engineering:#e6f2fa; --tint-art:#fff0e6;
+  --ok:#1f7a52; --ok-soft:#e3f6ec; --warn:#94601a; --warn-soft:#fff2db; --bad:#b4483c; --bad-soft:#ffe9e4;
+  --ill-line:#3f5f86; --ill-1:#a5d6ec; --ill-2:#ffc2a8; --ill-3:#d3f0e5; --ill-4:#ffffff;
+  --shadow:0 1px 2px rgba(70,100,130,.06),0 8px 24px rgba(70,100,130,.09);
+  --f-display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --f-body:"Figtree","Segoe UI",system-ui,-apple-system,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--surface)}
+h1,h2,h3,h4{font-family:var(--f-display);line-height:1.12;margin:0;text-wrap:balance;letter-spacing:-.01em}
+p{margin:0}
+a{color:var(--teal-ink)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1160px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--teal-ink)}
+.muted{color:var(--muted)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* Demo strip + header */
+.demo-strip{background:var(--teal-soft);color:var(--ink);font-size:.85rem;border-bottom:1px solid var(--line)}
+.demo-strip .wrap{display:flex;gap:10px;align-items:center;padding-block:8px;flex-wrap:wrap}
+.demo-tag{font-family:var(--f-mono);font-size:.72rem;background:var(--peach);color:var(--peach-ink);padding:2px 8px;border-radius:4px;letter-spacing:.04em}
+header.site{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--surface);border-bottom:1px solid var(--line)}
+header.site .wrap{display:flex;align-items:center;gap:20px;height:66px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-family:var(--f-display);font-weight:800;font-size:1.3rem;background:none;border:0;cursor:pointer;padding:0}
+.brand-mark{width:34px;height:34px;border-radius:9px;background:var(--navy);display:grid;place-items:center}
+.brand-mark svg{width:20px;height:20px;stroke:var(--navy-ink);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+nav.main{display:flex;gap:4px;margin-left:auto}
+nav.main button{background:none;border:0;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600;color:var(--muted)}
+nav.main button:hover{color:var(--ink);background:var(--bg)}
+nav.main button[aria-current="page"]{color:var(--ink);background:var(--navy)}
+.menu-btn{display:none;margin-left:auto;background:none;border:1px solid var(--line);border-radius:8px;width:42px;height:42px;cursor:pointer}
+.menu-btn svg{width:20px;height:20px;stroke:var(--ink);fill:none;stroke-width:2;stroke-linecap:round}
+@media (max-width:880px){
+  .menu-btn{display:grid;place-items:center}
+  nav.main{display:none;position:absolute;left:0;right:0;top:66px;background:var(--surface);flex-direction:column;padding:8px max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--line);box-shadow:var(--shadow)}
+  nav.main.open{display:flex}
+  nav.main button{text-align:left;padding:12px}
+  .nav-cta{display:none}
+}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:10px;padding:12px 20px;font-weight:700;cursor:pointer;border:1.5px solid transparent;text-decoration:none;transition:transform .15s,background .15s;white-space:nowrap}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--navy);color:var(--navy-ink)}
+.btn-primary:hover{filter:brightness(.96)}
+.btn-ghost{background:transparent;border-color:var(--line);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--teal-ink)}
+.btn-teal{background:var(--peach);color:#6b2d18}
+.btn-sm{padding:8px 14px;font-size:.9rem;border-radius:8px}
+.btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* Views */
+.view{padding-bottom:72px}
+.page-head{padding-block:44px 28px}
+.page-head h1{font-size:clamp(2rem,4.2vw,2.9rem)}
+.page-head p{margin-top:10px;max-width:62ch;color:var(--muted);font-size:1.08rem}
+section{margin-top:56px}
+.sec-head{display:flex;align-items:end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.sec-head h2{font-size:clamp(1.5rem,2.8vw,2rem)}
+
+/* Hero */
+.hero{padding-block:56px 20px}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.hero h1{font-size:clamp(2.4rem,5.4vw,4rem);font-weight:800;letter-spacing:-.025em}
+.hero h1 em{font-style:normal;color:var(--teal-ink)}
+.hero .lede{margin-top:18px;font-size:1.15rem;color:var(--muted);max-width:52ch}
+.hero-actions{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+.hero-search{margin-top:28px;display:flex;gap:8px;max-width:500px;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:6px 6px 6px 14px;align-items:center}
+.hero-search svg{width:20px;height:20px;stroke:var(--muted);fill:none;stroke-width:2;flex:none}
+.hero-search input{flex:1;min-width:0;border:0;background:transparent;padding:8px 4px;outline:none}
+.hero-meta{display:flex;gap:22px;margin-top:22px;flex-wrap:wrap;color:var(--muted);font-size:.92rem}
+.hero-meta b{color:var(--ink)}
+.shelf{position:relative;background:var(--teal-soft);border-radius:24px;padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.shelf-card{background:var(--surface);border-radius:16px;padding:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px;cursor:pointer;border:0;text-align:left;transition:transform .2s}
+.shelf-card:hover{transform:translateY(-3px)}
+.shelf-card:first-child{grid-row:span 2;justify-content:center}
+.shelf-card .art{border-radius:10px}
+.shelf-card strong{font-size:.95rem;line-height:1.25}
+.shelf-card span{font-size:.82rem;color:var(--muted)}
+.shelf-note{position:absolute;right:16px;bottom:-14px;background:var(--peach);color:var(--peach-ink);font-family:var(--f-mono);font-size:.72rem;padding:5px 10px;border-radius:6px}
+@media (max-width:880px){.hero-grid{grid-template-columns:1fr}.hero{padding-top:36px}}
+
+/* Category tiles */
+.cat-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.cat-tile{border:1px solid var(--line);background:var(--surface);border-radius:16px;padding:22px;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:6px 14px;align-items:start;transition:border-color .15s,transform .15s}
+.cat-tile:hover{border-color:var(--teal-ink);transform:translateY(-2px)}
+.cat-tile h3{font-size:1.3rem}
+.cat-tile p{grid-column:1/-1;color:var(--muted);font-size:.95rem}
+.cat-tile .count{font-family:var(--f-mono);font-size:.8rem;color:var(--muted)}
+.cat-tile .glyph{width:52px;height:52px;border-radius:12px;display:grid;place-items:center;grid-row:span 2}
+.cat-tile .glyph svg{width:26px;height:26px;stroke:var(--ink);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.cat-tile .from{grid-column:1/-1;margin-top:8px;font-weight:600;font-size:.9rem;color:var(--teal-ink)}
+@media (max-width:760px){.cat-tiles{grid-template-columns:1fr}}
+
+/* Item cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;cursor:pointer;text-align:left;padding:0;transition:transform .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.art{aspect-ratio:4/3;max-width:100%;display:grid;place-items:center;position:relative}
+.art[data-cat="medical"]{background:var(--tint-medical)}
+.art[data-cat="engineering"]{background:var(--tint-engineering)}
+.art[data-cat="art"]{background:var(--tint-art)}
+.art svg{width:78%;height:auto}
+.card-body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.cat-chip{font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.card h3{font-family:var(--f-body);font-weight:700;font-size:1.04rem;letter-spacing:0}
+.card .desc{color:var(--muted);font-size:.9rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-foot{margin-top:auto;padding-top:10px;display:flex;align-items:baseline;justify-content:space-between;gap:8px;border-top:1px dashed var(--line)}
+.price{font-family:var(--f-mono);font-weight:500;font-size:1.05rem}
+.price small{font-family:var(--f-body);font-size:.8rem;color:var(--muted);font-weight:500}
+.demo-mark{font-size:.7rem;color:var(--muted);font-family:var(--f-mono)}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:.76rem;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+
+/* Illustrations */
+.ill *{fill:none}
+.ill .s{stroke:var(--ill-line);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.ill .thin{stroke-width:2}
+.ill .thick{stroke-width:9}
+.ill .s4{stroke:var(--ill-4);stroke-width:3;stroke-linecap:round}
+.ill .dash{stroke-dasharray:4 5}
+.ill .f1{fill:var(--ill-1)} .ill .f2{fill:var(--ill-2)} .ill .f3{fill:var(--ill-3)} .ill .f4{fill:var(--ill-4)} .ill .fl{fill:var(--ill-line)}
+
+/* Browse */
+.browse-layout{display:grid;grid-template-columns:270px 1fr;gap:28px;align-items:start}
+.filters{position:sticky;top:calc(env(safe-area-inset-top,0px) + 86px);background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:20px}
+.filters h2{font-size:1.1rem}
+.field{display:flex;flex-direction:column;gap:7px}
+.field > label,.field > .lbl{font-weight:600;font-size:.88rem}
+.field .hint{font-size:.8rem;color:var(--muted)}
+.input,select.input,textarea.input{width:100%;border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:11px 12px;outline:none;transition:border-color .15s}
+.input:focus{border-color:var(--focus)}
+.input[aria-invalid="true"]{border-color:var(--bad)}
+.err{font-size:.82rem;color:var(--bad);font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 13px;font-size:.88rem;font-weight:600;cursor:pointer;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:var(--navy-ink)}
+input[type=range]{width:100%;accent-color:var(--teal-ink)}
+.range-row{display:flex;justify-content:space-between;font-size:.82rem;color:var(--muted)}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:.92rem;cursor:pointer}
+.check input{width:18px;height:18px;margin-top:2px;accent-color:var(--teal-ink);flex:none}
+.results-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.results-bar .count{font-weight:600}
+.searchbox{position:relative}
+.searchbox svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:18px;height:18px;stroke:var(--muted);fill:none;stroke-width:2}
+.searchbox .input{padding-left:38px}
+.empty{grid-column:1/-1;text-align:center;padding:48px 20px;border:1.5px dashed var(--line);border-radius:16px;color:var(--muted)}
+.empty h3{color:var(--ink);font-size:1.2rem;margin-bottom:6px}
+.filter-toggle{display:none}
+@media (max-width:880px){
+  .browse-layout{grid-template-columns:1fr}
+  .filters{position:static;display:none}
+  .filters.open{display:flex}
+  .filter-toggle{display:inline-flex}
+}
+
+/* Dialog */
+dialog.detail{border:0;padding:0;border-radius:20px;background:var(--surface);color:var(--ink);width:min(920px,calc(100vw - 32px));max-height:calc(100vh - 40px);box-shadow:0 30px 80px rgba(70,100,130,.25)}
+dialog.detail::backdrop{background:rgba(70,90,115,.28)}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr}
+.detail-grid .art{aspect-ratio:auto;height:100%;min-height:300px}
+.detail-body{padding:28px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.detail-body h2{font-size:1.75rem}
+.close-x{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;border:0;background:var(--surface);cursor:pointer;display:grid;place-items:center;box-shadow:var(--shadow);z-index:2}
+.close-x svg{width:18px;height:18px;stroke:var(--ink);stroke-width:2.2;fill:none;stroke-linecap:round}
+.periods{width:100%;border-collapse:collapse;font-size:.92rem}
+.periods th,.periods td{padding:8px 0;border-bottom:1px solid var(--line);text-align:left}
+.periods td:last-child,.periods th:last-child{text-align:right}
+.periods th{font-size:.75rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700}
+.includes{margin:0;padding-left:18px;color:var(--muted);font-size:.92rem;columns:2;column-gap:18px}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fact{background:var(--bg);border-radius:10px;padding:10px 12px}
+.fact .k{font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:700}
+.fact .v{font-weight:600;margin-top:2px}
+@media (max-width:760px){.detail-grid{grid-template-columns:1fr}.detail-grid .art{min-height:200px;aspect-ratio:16/10}.includes{columns:1}}
+
+/* Reservation */
+.reserve-layout{display:grid;grid-template-columns:1.4fr 1fr;gap:28px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:26px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.form-grid .full{grid-column:1/-1}
+.form-section-title{grid-column:1/-1;font-family:var(--f-display);font-size:1.15rem;padding-top:6px}
+.summary{position:sticky;top:calc(env(safe-area-inset-top,0px) + 86px)}
+.sum-item{display:flex;gap:14px;align-items:center;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.sum-item .art{width:96px;flex:none;border-radius:10px}
+.sum-rows{display:flex;flex-direction:column;gap:10px;padding-block:16px;border-bottom:1px solid var(--line);font-size:.94rem}
+.sum-row{display:flex;justify-content:space-between;gap:12px}
+.sum-row span:first-child{color:var(--muted)}
+.sum-total{display:flex;justify-content:space-between;align-items:baseline;padding-top:16px;font-weight:700}
+.sum-total .mono{font-size:1.35rem}
+.notice{display:flex;gap:10px;align-items:flex-start;background:var(--teal-soft);border-radius:12px;padding:12px 14px;font-size:.88rem;margin-top:16px}
+.notice svg{width:18px;height:18px;flex:none;stroke:var(--teal-ink);fill:none;stroke-width:2;margin-top:2px}
+.confirm{text-align:left}
+.confirm .badge{width:56px;height:56px;border-radius:50%;background:var(--ok-soft);display:grid;place-items:center;margin-bottom:14px}
+.confirm .badge svg{width:28px;height:28px;stroke:var(--ok);stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.ref{font-family:var(--f-mono);background:var(--bg);padding:3px 8px;border-radius:6px}
+.my-res{margin-top:28px}
+.res-list{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.res-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--surface);font-size:.92rem}
+.res-row b{display:block}
+.linkbtn{background:none;border:0;color:var(--teal-ink);font-weight:600;cursor:pointer;padding:4px;text-decoration:underline;text-underline-offset:3px}
+@media (max-width:880px){.reserve-layout{grid-template-columns:1fr}.summary{position:static}.form-grid{grid-template-columns:1fr}}
+
+/* How it works */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;counter-reset:step}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:26px;position:relative}
+.step-num{font-family:var(--f-mono);font-size:.82rem;color:var(--teal-ink)}
+.step .ic{width:52px;height:52px;border-radius:14px;background:var(--teal-soft);display:grid;place-items:center;margin:14px 0 16px}
+.step .ic svg{width:26px;height:26px;stroke:var(--teal-ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.step h3{font-size:1.35rem;margin-bottom:8px}
+.step p{color:var(--muted)}
+.step ul{margin:14px 0 0;padding-left:18px;color:var(--muted);font-size:.92rem;display:flex;flex-direction:column;gap:4px}
+@media (max-width:820px){.steps{grid-template-columns:1fr}}
+.rules{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.rule{display:flex;gap:14px;padding:18px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
+.rule svg{width:24px;height:24px;flex:none;stroke:var(--ink);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.rule h4{font-family:var(--f-body);font-size:1rem;font-weight:700;margin-bottom:3px}
+.rule p{color:var(--muted);font-size:.92rem}
+@media (max-width:700px){.rules{grid-template-columns:1fr}}
+
+/* Bands */
+.band{background:var(--band);border:1px solid #d3eaf4;color:var(--band-ink);border-radius:24px;padding:40px;display:grid;grid-template-columns:1.2fr 1fr;gap:32px;align-items:center}
+.band h2{font-size:clamp(1.6rem,3vw,2.2rem)}
+.band p{color:var(--band-muted);margin-top:10px}
+.band .eyebrow{color:var(--teal-ink)}
+.compare{display:flex;flex-direction:column;gap:14px}
+.bar-row .lbl{display:flex;justify-content:space-between;font-size:.9rem;margin-bottom:6px}
+.bar{height:14px;border-radius:7px;background:rgba(43,58,79,.09);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:7px}
+.bar .buy{background:#9ad3ec}
+.bar .rent{background:#ffb092}
+@media (max-width:820px){.band{grid-template-columns:1fr;padding:28px}}
+
+/* About */
+.about-intro{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.about-intro .big{font-family:var(--f-display);font-size:clamp(1.4rem,2.6vw,1.9rem);font-weight:600;line-height:1.3}
+.about-intro .body{display:flex;flex-direction:column;gap:14px;color:var(--muted)}
+.benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.benefit{padding:24px;border-radius:18px;background:var(--surface);border:1px solid var(--line)}
+.benefit .ic{width:44px;height:44px;border-radius:12px;background:var(--navy);display:grid;place-items:center;margin-bottom:16px}
+.benefit .ic svg{width:22px;height:22px;stroke:var(--navy-ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.benefit h3{font-size:1.25rem;margin-bottom:8px}
+.benefit p{color:var(--muted);font-size:.95rem}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+table.savings{width:100%;border-collapse:collapse;min-width:560px;font-size:.94rem}
+table.savings th,table.savings td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--line)}
+table.savings tr:last-child td{border-bottom:0}
+table.savings th{font-size:.74rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+table.savings td.num,table.savings th.num{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.save-pct{color:var(--ok);font-weight:700}
+@media (max-width:820px){.about-intro,.benefits{grid-template-columns:1fr}}
+
+/* Contact */
+.contact-layout{display:grid;grid-template-columns:1fr 1.4fr;gap:28px;align-items:start}
+.contact-info{display:flex;flex-direction:column;gap:16px}
+.info-item{display:flex;gap:12px;align-items:flex-start}
+.info-item svg{width:22px;height:22px;flex:none;stroke:var(--teal-ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;margin-top:2px}
+.info-item b{display:block}
+.copy-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+@media (max-width:820px){.contact-layout{grid-template-columns:1fr}}
+
+/* Footer */
+footer.site{background:var(--band);color:var(--band-ink);margin-top:40px;border-top:1px solid var(--line)}
+footer.site .wrap{padding-block:44px 28px}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:28px}
+.foot-grid h4{font-family:var(--f-body);font-size:.78rem;text-transform:uppercase;letter-spacing:.09em;color:var(--band-muted);margin-bottom:12px}
+.foot-grid ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.foot-grid button{background:none;border:0;padding:0;color:var(--band-ink);cursor:pointer;font-size:.95rem}
+.foot-grid button:hover{color:var(--teal-ink)}
+.foot-grid p{color:var(--band-muted);font-size:.92rem}
+.foot-brand{font-family:var(--f-display);font-weight:800;font-size:1.4rem;margin-bottom:8px}
+.foot-bottom{margin-top:32px;padding-top:18px;border-top:1px solid rgba(43,58,79,.12);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:.84rem;color:var(--band-muted)}
+@media (max-width:820px){.foot-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.foot-grid{grid-template-columns:1fr}}
+
+/* Lend */
+.period-checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+.period-checks label{display:flex;gap:8px;align-items:center;border:1.5px solid var(--line);border-radius:10px;padding:9px 11px;cursor:pointer;font-size:.92rem}
+.period-checks input{accent-color:var(--teal-ink);width:16px;height:16px}
+.period-checks label:has(input:checked){border-color:var(--teal-ink);background:var(--teal-soft)}
+.input-prefix{position:relative}
+.input-prefix span{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-family:var(--f-mono);font-size:.85rem;color:var(--muted)}
+.input-prefix .input{padding-left:48px}
+.preview-card{max-width:300px;pointer-events:none}
+.lend-cta{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;background:var(--peach-soft);border:1px solid #ffe0d0;border-radius:20px;padding:28px 32px}
+.lend-cta h2{font-size:clamp(1.4rem,2.6vw,1.8rem)}
+.lend-cta p{color:var(--muted);margin-top:6px;max-width:60ch}
+.user-tag{font-size:.72rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--teal-ink)}
+@media (max-width:700px){.lend-cta{grid-template-columns:1fr;padding:24px}}
+
+
+/* Reviews & ratings */
+.stars{position:relative;display:inline-block;line-height:1;letter-spacing:1px;font-size:1rem;white-space:nowrap;vertical-align:-1px}
+.stars-bg{color:#e3d8c9}
+.stars-fg{position:absolute;left:0;top:0;overflow:hidden;color:#e8a03a;white-space:nowrap}
+.stars.lg{font-size:1.35rem}
+.rate-line{display:flex;align-items:center;gap:6px;font-size:.84rem;flex-wrap:wrap}
+.reviews{padding:24px 28px 28px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:16px}
+.reviews h3{font-size:1.4rem}
+.rev-sum{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;background:var(--bg);border-radius:14px;padding:18px 22px}
+.rev-big{font-family:var(--f-display);font-size:2.8rem;font-weight:800;line-height:1}
+.dist{display:flex;flex-direction:column;gap:6px;min-width:0}
+.dist-row{display:grid;grid-template-columns:52px 1fr 28px;gap:10px;align-items:center;font-size:.82rem;color:var(--muted)}
+.dist .bar{height:10px}
+.bar .star-fill{background:#f0b45a}
+.rev-list{display:flex;flex-direction:column;gap:12px}
+.rev{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:var(--surface)}
+.rev-head{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+.rev-meta{font-size:.84rem;color:var(--muted)}
+.rev p{margin-top:8px;overflow-wrap:anywhere}
+.rev-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.rev-form{display:flex;flex-direction:column;gap:16px;background:var(--teal-soft);border-color:#d3eee4}
+.rev-form h4{font-family:var(--f-display);font-size:1.15rem}
+.rev-form .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.star-input{display:flex;gap:2px;align-items:center;flex-wrap:wrap}
+.star-btn{background:none;border:0;cursor:pointer;font-size:2rem;line-height:1;width:44px;height:44px;color:#d9cdbd;padding:0;border-radius:8px;transition:transform .12s}
+.star-btn.on{color:#e8a03a}
+.star-btn:hover{transform:scale(1.1)}
+.star-label{font-weight:600;font-size:.9rem;margin-left:8px;color:var(--ink)}
+.rev-gate{display:flex;flex-direction:column;gap:12px;background:var(--peach-soft);border:1px solid #ffe0d0;border-radius:14px;padding:16px 18px}
+.rev-gate p{font-size:.92rem}
+.rev-gate .btn,.rev-form .btn{white-space:normal;text-align:center}
+.dist-row span:first-child{white-space:nowrap}
+@media (max-width:760px){.reviews{padding:20px 18px 24px}.rev-sum{grid-template-columns:1fr;gap:14px}.rev-form .two{grid-template-columns:1fr}}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);background:var(--surface);color:var(--ink);border:1px solid var(--navy);box-shadow:var(--shadow);padding:12px 18px;border-radius:10px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:100;max-width:calc(100vw - 32px)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+
+<div class="demo-strip" role="note">
+  <div class="wrap"><span class="demo-tag">DEMO</span><span>Prototype for presentation. Items, prices and availability are sample data. No real reservations, payments or accounts are connected.</span></div>
+</div>
+
+<header class="site">
+  <div class="wrap">
+    <button class="brand" data-go="home" aria-label="CampusKit home">
+      <span class="brand-mark"><svg viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M9 8V5h6v3M4 13h16M11 13v2h2v-2"/></svg></span>
+      CampusKit
+    </button>
+    <nav class="main" id="mainNav" aria-label="Main">
+      <button data-go="home">Home</button>
+      <button data-go="browse">Browse Items</button>
+      <button data-go="how">How It Works</button>
+      <button data-go="about">About Us</button>
+      <button data-go="contact">Contact</button>
+      <button data-go="reserve">Reserve</button>
+      <button data-go="lend">List an Item</button>
+    </nav>
+    <button class="btn btn-primary btn-sm nav-cta" data-go="browse">Explore Items</button>
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  </div>
+</header>
+
+<main>
+<!-- HOME -->
+<div class="view" id="view-home">
+  <div class="wrap hero">
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">Academic tool rental for university students</p>
+        <h1 style="margin-top:12px">The tools your course needs, <em>without buying them.</em></h1>
+        <p class="lede">Borrow stethoscopes, drafting boards, microscopes, easels and more for a day, a week or a month. Pick it up on campus, use it for your lab or project, and bring it back.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" data-go="browse">Explore Items <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          <button class="btn btn-ghost" data-go="how">How it works</button>
+        </div>
+        <form class="hero-search" id="heroSearch" role="search">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+          <label class="sr" for="heroQ">Search items</label>
+          <input id="heroQ" placeholder="Try “microscope”, “calculator” or “easel”">
+          <button class="btn btn-teal btn-sm" type="submit">Search</button>
+        </form>
+        <div class="hero-meta" id="heroMeta"></div>
+      </div>
+      <div class="shelf" id="heroShelf" aria-label="Featured items"></div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <section>
+      <div class="sec-head"><div><p class="eyebrow">Browse by faculty</p><h2 style="margin-top:6px">Three shelves, one campus</h2></div></div>
+      <div class="cat-tiles" id="catTiles"></div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <div><p class="eyebrow">Popular this week</p><h2 style="margin-top:6px">Ready for pickup</h2></div>
+        <button class="btn btn-ghost btn-sm" data-go="browse">See all items</button>
+      </div>
+      <div class="grid" id="featuredGrid"></div>
+    </section>
+
+    <section>
+      <div class="band" id="homeBand"></div>
+    </section>
+
+    <section>
+      <div class="lend-cta">
+        <div><p class="eyebrow">Have a tool you're not using?</p><h2 style="margin-top:6px">List it on CampusKit and let another student rent it</h2><p>Finished with your dissection kit, drafting board or drawing tablet? Set your own price, choose a pickup hub and earn from it every time it's rented.</p></div>
+        <button class="btn btn-primary" data-go="lend">List an Item</button>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head"><div><p class="eyebrow">How it works</p><h2 style="margin-top:6px">Find it, reserve it, return it</h2></div><button class="btn btn-ghost btn-sm" data-go="how">Full details</button></div>
+      <div class="steps" id="homeSteps"></div>
+    </section>
+  </div>
+</div>
+
+<!-- BROWSE -->
+<div class="view" id="view-browse" hidden>
+  <div class="wrap page-head">
+    <p class="eyebrow">Browse items</p>
+    <h1 style="margin-top:8px">Find the tool for your next lab, studio or project</h1>
+    <p>Search the catalogue, filter by faculty and daily price, and check whether an item is free on the day you need it.</p>
+  </div>
+  <div class="wrap browse-layout">
+    <aside class="filters" id="filters" aria-label="Filters">
+      <div style="display:flex;justify-content:space-between;align-items:center"><h2>Filters</h2><button class="linkbtn" id="resetFilters" type="button">Reset</button></div>
+      <div class="field">
+        <span class="lbl" id="catLbl">Category</span>
+        <div class="chips" id="catChips" role="group" aria-labelledby="catLbl"></div>
+      </div>
+      <div class="field">
+        <label for="maxPrice">Max price per day</label>
+        <input type="range" id="maxPrice" min="15" max="80" step="5" value="80">
+        <div class="range-row"><span>EGP 15</span><span class="mono" id="maxPriceOut">Any price</span></div>
+      </div>
+      <div class="field">
+        <label for="needDate">Check availability for</label>
+        <input type="date" id="needDate" class="input">
+        <span class="hint">Pick the day you want to collect an item.</span>
+      </div>
+      <label class="check"><input type="checkbox" id="onlyAvail"> Only show items available on that day</label>
+    </aside>
+    <div style="min-width:0">
+      <div class="results-bar">
+        <div class="searchbox" style="flex:1;min-width:220px">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+          <label class="sr" for="q">Search items</label>
+          <input class="input" id="q" type="search" placeholder="Search by name, use or course">
+        </div>
+        <label class="sr" for="sort">Sort</label>
+        <select class="input" id="sort" style="width:auto">
+          <option value="rec">Recommended</option>
+          <option value="low">Price: low to high</option>
+          <option value="high">Price: high to low</option>
+          <option value="avail">Available soonest</option>
+          <option value="rated">Top rated</option>
+        </select>
+        <button class="btn btn-ghost btn-sm filter-toggle" id="filterToggle" aria-expanded="false" aria-controls="filters">Filters</button>
+      </div>
+      <p class="muted" style="margin-bottom:14px"><span class="count" id="resultCount" style="color:var(--ink)"></span> <span id="resultNote"></span></p>
+      <div class="grid" id="browseGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- RESERVE -->
+<div class="view" id="view-reserve" hidden>
+  <div class="wrap page-head">
+    <p class="eyebrow">Reservation</p>
+    <h1 style="margin-top:8px">Reserve an item</h1>
+    <p>Choose the item, how long you need it and when you want to collect it. This is a demonstration form: nothing is booked and no payment is taken.</p>
+  </div>
+  <div class="wrap reserve-layout">
+    <div>
+      <form class="panel" id="resForm" novalidate>
+        <div class="form-grid">
+          <h2 class="form-section-title">Your rental</h2>
+          <div class="field full">
+            <label for="rItem">Item</label>
+            <select class="input" id="rItem" required></select>
+            <span class="err" id="rItemErr" hidden></span>
+          </div>
+          <div class="field">
+            <label for="rPeriod">Rental duration</label>
+            <select class="input" id="rPeriod" required></select>
+          </div>
+          <div class="field">
+            <label for="rDate">Preferred pickup date</label>
+            <input class="input" type="date" id="rDate" required>
+            <span class="hint" id="rDateHint"></span>
+            <span class="err" id="rDateErr" hidden></span>
+          </div>
+          <div class="field full">
+            <label for="rHub">Pickup point</label>
+            <select class="input" id="rHub">
+              <option>Main campus hub, Central Library ground floor</option>
+              <option>Faculty of Medicine hub, Anatomy building lobby</option>
+              <option>Faculty of Engineering hub, Workshop block B</option>
+              <option>Faculty of Fine Arts hub, Studio wing entrance</option>
+            </select>
+          </div>
+          <h2 class="form-section-title">Your details</h2>
+          <div class="field">
+            <label for="rName">Full name</label>
+            <input class="input" id="rName" autocomplete="name" required>
+            <span class="err" id="rNameErr" hidden></span>
+          </div>
+          <div class="field">
+            <label for="rEmail">University email</label>
+            <input class="input" id="rEmail" type="email" autocomplete="email" placeholder="name@university.edu.eg" required>
+            <span class="err" id="rEmailErr" hidden></span>
+          </div>
+          <div class="field">
+            <label for="rFaculty">Faculty</label>
+            <select class="input" id="rFaculty">
+              <option>Medicine</option><option>Dentistry</option><option>Pharmacy</option><option>Engineering</option><option>Fine Arts</option><option>Architecture</option><option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="rYear">Year of study</label>
+            <select class="input" id="rYear"><option>1st year</option><option>2nd year</option><option selected>3rd year</option><option>4th year</option><option>5th year</option><option>Postgraduate</option></select>
+          </div>
+          <div class="field full">
+            <label for="rNote">Note for the hub team <span class="muted" style="font-weight:400">(optional)</span></label>
+            <textarea class="input" id="rNote" rows="3" placeholder="e.g. I need it for the anatomy practical on Thursday"></textarea>
+          </div>
+          <label class="check full"><input type="checkbox" id="rAgree"> I understand this is a demo and that no real reservation or payment will be made.</label>
+          <span class="err full" id="rAgreeErr" hidden></span>
+          <div class="full" style="display:flex;gap:12px;flex-wrap:wrap">
+            <button class="btn btn-primary" type="submit">Confirm demo reservation</button>
+            <button class="btn btn-ghost" type="button" data-go="browse">Back to items</button>
+          </div>
+        </div>
+      </form>
+      <div class="panel confirm" id="resDone" hidden></div>
+      <div class="my-res" id="myRes"></div>
+    </div>
+    <aside class="panel summary" id="summary" aria-live="polite"></aside>
+  </div>
+</div>
+
+<!-- LEND -->
+<div class="view" id="view-lend" hidden>
+  <div class="wrap page-head">
+    <p class="eyebrow">List an item</p>
+    <h1 style="margin-top:8px">Rent out a tool you already own</h1>
+    <p>Add an item to the CampusKit shelf. Other students can find it, reserve it and collect it from a campus hub. This is a demo: your listing appears in Browse Items but is saved only in this browser.</p>
+  </div>
+  <div class="wrap reserve-layout">
+    <div>
+      <form class="panel" id="lendForm" novalidate>
+        <div class="form-grid">
+          <h2 class="form-section-title">About the item</h2>
+          <div class="field full">
+            <label for="lName">Item name</label>
+            <input class="input" id="lName" maxlength="60" placeholder="e.g. Scientific calculator, Anatomy atlas, Watercolour set">
+            <span class="err" id="lNameErr" hidden></span>
+          </div>
+          <div class="field">
+            <label for="lCat">Category</label>
+            <select class="input" id="lCat"><option value="medical">Medical</option><option value="engineering">Engineering</option><option value="art">Art</option></select>
+          </div>
+          <div class="field">
+            <label for="lCond">Condition</label>
+            <select class="input" id="lCond"><option>Like new</option><option selected>Good, light signs of use</option><option>Fair, fully working</option></select>
+          </div>
+          <div class="field full">
+            <label for="lDesc">Short description</label>
+            <textarea class="input" id="lDesc" rows="3" maxlength="280" placeholder="What is it, which course is it useful for, and anything a renter should know."></textarea>
+            <span class="err" id="lDescErr" hidden></span>
+          </div>
+          <div class="field full">
+            <label for="lIncl">What's included <span class="muted" style="font-weight:400">(optional, separate with commas)</span></label>
+            <input class="input" id="lIncl" placeholder="e.g. Case, spare batteries, user guide">
+          </div>
+
+          <h2 class="form-section-title">Pricing</h2>
+          <div class="field">
+            <label for="lDay">Price per day</label>
+            <div class="input-prefix"><span>EGP</span><input class="input" id="lDay" type="number" min="15" max="300" step="5" inputmode="numeric"></div>
+            <span class="hint" id="lPriceHint"></span>
+            <span class="err" id="lDayErr" hidden></span>
+          </div>
+          <div class="field">
+            <label for="lDep">Refundable deposit</label>
+            <div class="input-prefix"><span>EGP</span><input class="input" id="lDep" type="number" min="0" max="500" step="10" inputmode="numeric"></div>
+            <span class="hint">Keep it small, a few days of rent is enough. Returned to the renter when the item comes back.</span>
+            <span class="err" id="lDepErr" hidden></span>
+          </div>
+          <div class="field full">
+            <span class="lbl" id="lPerLbl">Rental periods you offer</span>
+            <div class="period-checks" id="lPeriods" role="group" aria-labelledby="lPerLbl"></div>
+            <span class="err" id="lPeriodsErr" hidden></span>
+          </div>
+
+          <h2 class="form-section-title">Handover and contact</h2>
+          <div class="field full">
+            <label for="lHub">Drop-off hub</label>
+            <select class="input" id="lHub">
+              <option>Main campus hub, Central Library ground floor</option>
+              <option>Faculty of Medicine hub, Anatomy building lobby</option>
+              <option>Faculty of Engineering hub, Workshop block B</option>
+              <option>Faculty of Fine Arts hub, Studio wing entrance</option>
+            </select>
+            <span class="hint">You leave the item at the hub; staff check it and hand it to renters.</span>
+          </div>
+          <div class="field">
+            <label for="lOwner">Your name</label>
+            <input class="input" id="lOwner" autocomplete="name">
+            <span class="err" id="lOwnerErr" hidden></span>
+          </div>
+          <div class="field">
+            <label for="lEmail">University email</label>
+            <input class="input" id="lEmail" type="email" autocomplete="email" placeholder="name@university.edu.eg">
+            <span class="err" id="lEmailErr" hidden></span>
+          </div>
+          <label class="check full"><input type="checkbox" id="lAgree"> I understand this is a demo. The listing is saved only in this browser and no real rentals or payouts will happen.</label>
+          <span class="err full" id="lAgreeErr" hidden></span>
+          <div class="full" style="display:flex;gap:12px;flex-wrap:wrap">
+            <button class="btn btn-primary" type="submit">Publish demo listing</button>
+            <button class="btn btn-ghost" type="button" data-go="browse">Back to items</button>
+          </div>
+        </div>
+      </form>
+      <div class="panel confirm" id="lendDone" hidden></div>
+      <div class="my-res" id="myListings"></div>
+    </div>
+    <aside class="panel summary" id="lendPreview" aria-live="polite"></aside>
+  </div>
+</div>
+
+<!-- HOW -->
+<div class="view" id="view-how" hidden>
+  <div class="wrap page-head">
+    <p class="eyebrow">How it works</p>
+    <h1 style="margin-top:8px">Three steps from “I need one” to done</h1>
+    <p>CampusKit runs from staffed pickup hubs on campus. You reserve online, collect in person and return the item when your rental ends.</p>
+  </div>
+  <div class="wrap">
+    <div class="steps" id="howSteps"></div>
+    <section>
+      <div class="sec-head"><div><p class="eyebrow">Good to know</p><h2 style="margin-top:6px">The rental rules, in plain words</h2></div></div>
+      <div class="rules">
+        <div class="rule"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg><div><h4>Refundable deposit</h4><p>Each item has a small deposit, paid at pickup and returned in full when the item comes back in the same condition.</p></div></div>
+        <div class="rule"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 17h5"/></svg><div><h4>Condition check</h4><p>Hub staff check every item with you at pickup and return, so you are never charged for wear that was already there.</p></div></div>
+        <div class="rule"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><h4>Extensions</h4><p>Need it longer? Ask at the hub before your return date and extend if nobody else has reserved the item.</p></div></div>
+        <div class="rule"><svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 016 6c0 4-6 12-6 12S6 13 6 9a6 6 0 016-6z"/><circle cx="12" cy="9" r="2"/></svg><div><h4>Late returns</h4><p>Late items are charged at the daily rate, so the next student who reserved it is not left waiting before an exam.</p></div></div>
+      </div>
+    </section>
+    <section style="text-align:center">
+      <h2>Ready to find what you need?</h2>
+      <div class="hero-actions" style="justify-content:center"><button class="btn btn-primary" data-go="browse">Explore Items</button><button class="btn btn-ghost" data-go="reserve">Go to reservations</button></div>
+    </section>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div class="view" id="view-about" hidden>
+  <div class="wrap page-head">
+    <p class="eyebrow">About us</p>
+    <h1 style="margin-top:8px">Built by students, for students who need the right tool for one semester</h1>
+  </div>
+  <div class="wrap">
+    <div class="about-intro">
+      <p class="big">A first-year anatomy course, a second-year circuits lab, a final-year art portfolio: each one asks students to own equipment they use for a few weeks and then store for years.</p>
+      <div class="body">
+        <p>CampusKit is a shared shelf for that equipment. We keep a stock of tools that medical, engineering and art students need for specific courses, check and clean them between rentals, and lend them out at a fraction of the purchase price.</p>
+        <p>The idea started as a university entrepreneurship project after we added up what our own classmates spent on tools they used for one course. Many students borrowed from friends, waited for a lab slot, or simply went without and fell behind.</p>
+      </div>
+    </div>
+    <section>
+      <div class="benefits">
+        <div class="benefit"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M16 15h2"/></svg></div><h3>Save money</h3><p>Pay only for the weeks you use an item. A one-week rental usually costs only a fraction of buying the same tool new.</p></div>
+        <div class="benefit"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V5h6v3M3 13h18"/></svg></div><h3>Access the right tools</h3><p>Get course-grade equipment, from microscopes to drawing tablets, that would be hard to justify buying on a student budget.</p></div>
+        <div class="benefit"><div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h3>Avoid academic delays</h3><p>Reserve ahead of practicals and deadlines so a missing tool never holds back an exam, a lab report or a final project.</p></div>
+      </div>
+    </section>
+    <section>
+      <div class="sec-head"><div><p class="eyebrow">Buy vs rent</p><h2 style="margin-top:6px">What a one-week rental saves</h2></div><span class="demo-mark">Demo prices · purchase prices are rough estimates</span></div>
+      <div class="table-wrap"><table class="savings" id="savingsTable"></table></div>
+    </section>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="view" id="view-contact" hidden>
+  <div class="wrap page-head">
+    <p class="eyebrow">Contact</p>
+    <h1 style="margin-top:8px">Questions, ideas or an item we should stock?</h1>
+    <p>Send us a message. In this prototype the form checks your details but does not send anything.</p>
+  </div>
+  <div class="wrap contact-layout">
+    <div class="contact-info">
+      <div class="info-item"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><div><b>Email</b><div class="copy-row"><span class="mono" id="mailText" style="user-select:all">hello@campuskit.example</span><button class="linkbtn" id="copyMail" type="button">Copy</button></div><span class="muted" style="font-size:.85rem">Sample address for the prototype.</span></div></div>
+      <div class="info-item"><svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 016 6c0 4-6 12-6 12S6 13 6 9a6 6 0 016-6z"/><circle cx="12" cy="9" r="2"/></svg><div><b>Main hub</b><span class="muted">Central Library, ground floor</span></div></div>
+      <div class="info-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><b>Hub hours</b><span class="muted">Sunday to Thursday, 9:00 to 17:00</span></div></div>
+    </div>
+    <div>
+      <form class="panel" id="contactForm" novalidate>
+        <div class="form-grid">
+          <div class="field"><label for="cName">Name</label><input class="input" id="cName" autocomplete="name"><span class="err" id="cNameErr" hidden></span></div>
+          <div class="field"><label for="cEmail">Email</label><input class="input" id="cEmail" type="email" autocomplete="email"><span class="err" id="cEmailErr" hidden></span></div>
+          <div class="field full"><label for="cTopic">Topic</label>
+            <select class="input" id="cTopic"><option>General question</option><option>Suggest an item to stock</option><option>Question about a reservation</option><option>Partnerships with a faculty or club</option></select></div>
+          <div class="field full"><label for="cMsg">Message</label><textarea class="input" id="cMsg" rows="5" placeholder="How can we help?"></textarea><span class="err" id="cMsgErr" hidden></span></div>
+          <div class="full"><button class="btn btn-primary" type="submit">Send message</button></div>
+        </div>
+      </form>
+      <div class="panel confirm" id="contactDone" hidden></div>
+    </div>
+  </div>
+</div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div><div class="foot-brand">CampusKit</div><p>Academic tools for medical, engineering and art students, rented by the day, week or month.</p></div>
+      <div><h4>Explore</h4><ul><li><button data-go="browse">Browse items</button></li><li><button data-cat="medical">Medical</button></li><li><button data-cat="engineering">Engineering</button></li><li><button data-cat="art">Art</button></li></ul></div>
+      <div><h4>Company</h4><ul><li><button data-go="how">How it works</button></li><li><button data-go="about">About us</button></li><li><button data-go="contact">Contact</button></li><li><button data-go="reserve">Reservations</button></li><li><button data-go="lend">List an item</button></li></ul></div>
+      <div><h4>About this prototype</h4><p>University entrepreneurship project. All items, prices and availability are sample data for demonstration. No real bookings, payments or user accounts exist.</p></div>
+    </div>
+    <div class="foot-bottom"><span>© 2026 CampusKit (student project)</span><span>Prices shown in EGP are demo prices</span></div>
+  </div>
+</footer>
+
+<dialog class="detail" id="detail" aria-labelledby="dTitle"></dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+const PERIODS={d1:{label:'1 day',days:1,mult:1},d3:{label:'3 days',days:3,mult:2.5},w1:{label:'1 week',days:7,mult:5},w2:{label:'2 weeks',days:14,mult:8.5},m1:{label:'1 month',days:30,mult:15}};
+const CATS={medical:{name:'Medical',blurb:'Clinical skills, anatomy and lab kit for medicine, dentistry and pharmacy.'},engineering:{name:'Engineering',blurb:'Calculators, drafting, electronics and measuring tools for labs and projects.'},art:{name:'Art',blurb:'Studio, drawing and photography gear for coursework and portfolios.'}};
+const ITEMS=[
+ {id:'stetho',cat:'medical',name:'Dual-head stethoscope',day:15,deposit:30,buy:450,periods:['d1','d3','w1','w2','m1'],booked:0,stock:4,desc:'Lightweight dual-head stethoscope for clinical skills sessions and OSCE practice. Cleaned and fitted with fresh ear tips after every rental.',includes:['Stethoscope','Spare ear tips','Diaphragm cover','Carry pouch'],tags:'cardiology auscultation osce clinical'},
+ {id:'skeleton',cat:'medical',name:'Half-size skeleton model',day:25,deposit:100,buy:3500,periods:['d3','w1','w2','m1'],booked:5,stock:1,desc:'85 cm articulated skeleton on a rolling stand, with removable skull cap and numbered bones. Ideal for anatomy revision at home.',includes:['Articulated skeleton','Rolling stand','Dust cover','Bone index sheet'],tags:'anatomy osteology bones revision'},
+ {id:'dissect',cat:'medical',name:'Student dissection kit',day:15,deposit:30,buy:350,periods:['d1','d3','w1','w2'],booked:0,stock:6,desc:'Stainless steel instrument set for anatomy and histology practicals. Sterilised between rentals; new scalpel blades included.',includes:['Scalpel handle + 5 blades','Forceps (2)','Scissors','Probe','Zip case'],tags:'anatomy surgery instruments scalpel'},
+ {id:'bp',cat:'medical',name:'Aneroid blood pressure kit',day:15,deposit:30,buy:450,periods:['d1','d3','w1','w2','m1'],booked:2,stock:3,desc:'Manual sphygmomanometer with adult cuff for practising blood pressure measurement before clinical rounds.',includes:['Gauge','Adult cuff','Inflation bulb','Storage case'],tags:'vitals blood pressure sphygmomanometer clinical'},
+ {id:'micro',cat:'medical',name:'Compound microscope',day:30,deposit:100,buy:3500,periods:['d1','d3','w1','w2'],booked:0,stock:2,desc:'40x to 1000x student microscope with LED illumination for histology and microbiology slides. Calibrated before each rental.',includes:['Microscope','4 objectives','Immersion oil','Dust cover','Prepared slide set'],tags:'histology microbiology pathology slides lab'},
+ {id:'suture',cat:'medical',name:'Suture practice kit',day:15,deposit:25,buy:300,periods:['d1','d3','w1','w2','m1'],booked:0,stock:8,desc:'Silicone skin pad with pre-cut wounds and reusable instruments for practising simple, mattress and subcuticular stitches.',includes:['Silicone pad','Needle holder','Forceps','Scissors','Practice sutures'],tags:'surgery skills stitching wound'},
+ {id:'calc',cat:'engineering',name:'Graphing calculator',day:15,deposit:60,buy:1095,periods:['d1','d3','w1','w2','m1'],booked:0,stock:5,desc:'Exam-approved graphing calculator for calculus, statistics and numerical methods. Reset to factory settings before each rental.',includes:['Calculator','Fresh batteries','Slide cover','Quick-start card'],tags:'math calculus statistics exam'},
+ {id:'draft',cat:'engineering',name:'A2 drafting board set',day:15,deposit:50,buy:1200,periods:['d3','w1','w2','m1'],booked:0,stock:3,desc:'Portable A2 drawing board with parallel motion, adjustable angle and a full set of squares for technical drawing and architecture.',includes:['A2 board','T-square','45° and 30/60° set squares','Carry handle'],tags:'technical drawing architecture drafting'},
+ {id:'meter',cat:'engineering',name:'Digital multimeter',day:15,deposit:30,buy:450,periods:['d1','d3','w1','w2','m1'],booked:0,stock:6,desc:'Auto-ranging multimeter for circuits labs: voltage, current, resistance, continuity and capacitance.',includes:['Multimeter','Test leads','Crocodile clips','Spare fuse'],tags:'electronics circuits electrical lab'},
+ {id:'arduino',cat:'engineering',name:'Microcontroller starter kit',day:15,deposit:40,buy:700,periods:['d3','w1','w2','m1'],booked:9,stock:2,desc:'Microcontroller board, breadboard and a box of sensors, LEDs and motors for embedded systems and graduation prototypes.',includes:['Microcontroller board','Breadboard','Jumper wires','Sensors and LEDs','USB cable'],tags:'arduino embedded electronics robotics project'},
+ {id:'caliper',cat:'engineering',name:'Digital vernier caliper',day:15,deposit:30,buy:350,periods:['d1','d3','w1','w2'],booked:0,stock:5,desc:'150 mm stainless digital caliper reading to 0.01 mm, for workshop, metrology and mechanical design labs.',includes:['Caliper','Spare battery','Protective case'],tags:'measurement mechanical workshop metrology'},
+ {id:'solder',cat:'engineering',name:'Soldering station',day:15,deposit:40,buy:750,periods:['d1','d3','w1','w2'],booked:1,stock:2,desc:'Temperature-controlled soldering station with stand and tip cleaner, for PCB assembly and electronics projects.',includes:['Station + iron','Stand and sponge','2 spare tips','Solder wire'],tags:'electronics pcb soldering'},
+ {id:'easel',cat:'art',name:'Wooden field easel',day:15,deposit:40,buy:900,periods:['d3','w1','w2','m1'],booked:0,stock:4,desc:'Foldable beech easel that holds canvases up to 120 cm, for studio sessions and outdoor painting assignments.',includes:['Easel','Shoulder bag','Canvas clamps'],tags:'painting studio canvas outdoor'},
+ {id:'lightbox',cat:'art',name:'A3 LED light box',day:15,deposit:30,buy:700,periods:['d1','d3','w1','w2','m1'],booked:0,stock:4,desc:'Slim dimmable tracing pad for animation, illustration and pattern work. Powered by USB.',includes:['Light box','USB cable','Paper clips'],tags:'tracing animation illustration drawing'},
+ {id:'camera',cat:'art',name:'DSLR camera kit',day:80,deposit:300,buy:18000,periods:['d1','d3','w1','w2'],booked:3,stock:2,desc:'Entry-level DSLR with 18 to 55 mm lens for photography modules, portfolio shoots and documenting projects.',includes:['Camera body','18-55 mm lens','2 batteries','Charger','32 GB card','Bag'],tags:'photography photo video portfolio'},
+ {id:'airbrush',cat:'art',name:'Airbrush and compressor set',day:15,deposit:60,buy:1500,periods:['d1','d3','w1','w2'],booked:0,stock:2,desc:'Dual-action airbrush with quiet compressor for illustration, model finishing and textile design.',includes:['Airbrush','Compressor','Hose','Cleaning kit'],tags:'painting illustration textile model'},
+ {id:'tablet',cat:'art',name:'Pen drawing tablet',day:15,deposit:60,buy:1500,periods:['d3','w1','w2','m1'],booked:0,stock:3,desc:'Medium pen tablet with pressure-sensitive stylus for digital illustration, graphic design and animation coursework.',includes:['Tablet','Battery-free pen','Spare nibs','USB cable'],tags:'digital illustration graphic design animation'},
+ {id:'portfolio',cat:'art',name:'A1 portfolio case',day:15,deposit:25,buy:350,periods:['d1','d3','w1','w2','m1'],booked:0,stock:7,desc:'Rigid, water-resistant A1 case with shoulder strap for carrying drawings and boards to juries and exhibitions.',includes:['Portfolio case','Shoulder strap','Inner sleeves'],tags:'jury presentation exhibition drawings'}
+];
+
+const PLATFORM_FEE=0.15;
+
+/* ---------- Illustrations ---------- */
+function grid(x0,y0,cols,rows,dx,dy,w,h,cls){let s='';for(let r=0;r<rows;r++)for(let c=0;c<cols;c++)s+=`<rect class="${cls}" x="${x0+c*dx}" y="${y0+r*dy}" width="${w}" height="${h}" rx="1.5"/>`;return s}
+function ticks(x0,y,n,dx){let d='';for(let i=0;i<n;i++)d+=`M${x0+i*dx} ${y} v${i%5===0?7:4} `;return `<path class="s thin" d="${d}"/>`}
+const ART={
+ stetho:`<circle class="f2 s" cx="68" cy="24" r="6"/><circle class="f2 s" cx="132" cy="24" r="6"/><path class="s" d="M68 30 V58 Q68 88 100 88 Q132 88 132 58 V30"/><path class="s" d="M100 88 V100 Q100 122 124 122 H134"/><circle class="f1 s" cx="150" cy="120" r="16"/><circle class="f3" cx="150" cy="120" r="8"/>`,
+ skeleton:`<circle class="f4 s" cx="100" cy="26" r="14"/><circle class="fl" cx="95" cy="25" r="2.5"/><circle class="fl" cx="105" cy="25" r="2.5"/><path class="s" d="M100 40 V102 M82 48 H118 M84 48 L72 78 L68 98 M116 48 L128 78 L132 98"/><path class="s" d="M100 54 Q82 55 80 64 M100 54 Q118 55 120 64 M100 64 Q84 65 83 73 M100 64 Q116 65 117 73 M100 74 Q88 75 88 82 M100 74 Q112 75 112 82"/><path class="f4 s" d="M86 102 Q100 94 114 102 L110 112 H90 Z"/><path class="s" d="M93 112 L90 132 M107 112 L110 132"/><rect class="f1" x="66" y="134" width="68" height="8" rx="3"/>`,
+ dissect:`<rect class="f1 s" x="28" y="32" width="144" height="90" rx="10"/><rect class="f3" x="38" y="42" width="124" height="70" rx="6"/><path class="s" d="M50 56 H114"/><path class="f4 s" d="M114 51 L138 56 L114 61 Z"/><path class="s" d="M50 76 L146 72 M50 76 L146 80"/><circle class="f4 s" cx="54" cy="96" r="6"/><circle class="f4 s" cx="54" cy="106" r="6"/><path class="s" d="M60 97 L140 92 M60 105 L140 108"/>`,
+ bp:`<rect class="f2 s" x="22" y="48" width="80" height="52" rx="10"/><path class="s" d="M22 64 H102"/><path class="s" d="M102 76 Q118 76 122 70"/><circle class="f4 s" cx="146" cy="54" r="26"/><path class="s thin" d="M128 54 h4 M146 36 v4 M164 54 h-4"/><path class="s" d="M146 54 L160 42"/><circle class="fl" cx="146" cy="54" r="3.5"/><path class="s" d="M102 88 Q126 96 132 116"/><ellipse class="f1 s" cx="134" cy="128" rx="11" ry="13"/>`,
+ micro:`<rect class="f1 s" x="52" y="120" width="98" height="14" rx="5"/><path class="s thick" d="M124 118 Q146 86 122 50"/><rect class="f2 s" x="82" y="24" width="20" height="54" rx="4" transform="rotate(-18 92 51)"/><rect class="f1" x="76" y="14" width="14" height="14" rx="3" transform="rotate(-18 83 21)"/><rect class="f1" x="98" y="76" width="9" height="12" rx="2"/><rect class="f4 s" x="70" y="90" width="64" height="8" rx="2"/><circle class="f1 s" cx="132" cy="82" r="7"/>`,
+ suture:`<rect class="f3 s" x="26" y="36" width="122" height="80" rx="14"/><path class="s" d="M46 78 Q88 68 128 78"/><path class="s thin" d="M56 66 L60 86 M70 64 L73 84 M84 62 L86 82 M98 63 L99 83 M112 66 L112 86"/><path class="s" d="M136 104 L172 128 M144 98 L178 120"/><circle class="f4 s" cx="180" cy="128" r="7"/><circle class="f4 s" cx="186" cy="116" r="7"/><path class="s" d="M128 106 q-10 -14 4 -22"/>`,
+ calc:`<rect class="f1 s" x="62" y="12" width="76" height="128" rx="12"/><rect class="f3" x="72" y="22" width="56" height="32" rx="3"/><path class="s thin" d="M76 46 Q88 22 100 38 T124 28"/>${grid(74,64,4,5,13.5,14,9,8,'f4')}`,
+ draft:`<path class="f4 s" d="M28 118 L50 28 H174 L162 118 Z"/><rect class="f1" x="44" y="70" width="124" height="7" rx="2"/><rect class="f1" x="34" y="62" width="12" height="24" rx="2"/><path class="f2 s" d="M96 108 L132 108 L96 82 Z"/><path class="s" d="M60 118 L54 144 M150 118 L156 144"/>`,
+ meter:`<rect class="f2 s" x="56" y="14" width="74" height="122" rx="12"/><rect class="f3 s" x="66" y="26" width="54" height="26" rx="3"/><path class="s thin" d="M74 40 h8 M86 40 h8 M98 40 h8"/><circle class="f1 s" cx="93" cy="84" r="17"/><path class="s4" d="M93 84 L102 72"/><circle class="f1" cx="76" cy="120" r="4"/><circle class="f1" cx="93" cy="120" r="4"/><circle class="f1" cx="110" cy="120" r="4"/><path class="s" d="M110 120 Q150 140 170 110 L180 74"/><path class="s" d="M93 124 Q120 150 160 140 L188 132"/>`,
+ arduino:`<rect class="f4 s" x="18" y="78" width="104" height="54" rx="4"/>${grid(26,86,12,4,8,10,3,3,'fl')}<rect class="f2 s" x="102" y="26" width="80" height="58" rx="5"/><rect class="f1" x="130" y="48" width="34" height="13" rx="1.5"/><rect class="f4 s" x="94" y="34" width="14" height="13" rx="1"/><path class="s thin dash" d="M112 34 H176 M112 76 H176"/><path class="s" d="M122 84 Q114 104 74 96"/><path class="s" d="M150 84 Q150 118 104 112"/><circle class="f2 s" cx="42" cy="70" r="6"/><path class="s thin" d="M40 76 V90 M44 76 V90"/>`,
+ caliper:`<rect class="f4 s" x="18" y="52" width="168" height="16" rx="2"/>${ticks(96,52,17,5)}<path class="f4 s" d="M26 68 V112 L40 100 V68"/><path class="f4 s" d="M28 52 V34 L38 52"/><rect class="f1 s" x="64" y="44" width="58" height="34" rx="5"/><rect class="f3" x="72" y="50" width="34" height="14" rx="2"/><circle class="f2" cx="113" cy="70" r="3.5"/><path class="f1 s" d="M70 78 V112 L84 100 V78"/>`,
+ solder:`<rect class="f1 s" x="20" y="76" width="78" height="58" rx="8"/><rect class="f3" x="30" y="86" width="36" height="18" rx="2"/><circle class="f2 s" cx="80" cy="114" r="10"/><rect class="f4 s" x="108" y="122" width="70" height="12" rx="4"/><path class="s" d="M122 122 L150 84"/><path class="s thin" d="M126 112 l9 -4 M132 104 l9 -4 M138 96 l9 -4"/><path class="f2 s" d="M138 90 L172 44 L181 50 L147 96 Z"/><path class="s" d="M177 46 L190 28"/><path class="s" d="M98 108 Q118 74 140 92"/>`,
+ easel:`<path class="s" d="M100 12 L56 142 M100 12 L144 142 M100 12 V142"/><rect class="f4 s" x="60" y="24" width="80" height="64" rx="2"/><path class="f2" d="M64 84 Q84 58 102 72 Q118 58 136 84 Z"/><circle class="f3" cx="118" cy="42" r="9"/><rect class="f1" x="52" y="88" width="96" height="7" rx="2"/>`,
+ lightbox:`<rect class="f3" x="22" y="36" width="156" height="94" rx="12"/><rect class="f4 s" x="32" y="46" width="136" height="74" rx="6"/><rect class="f4 s" x="58" y="54" width="72" height="58" rx="2" transform="rotate(-6 94 83)"/><path class="s thin" d="M70 96 Q86 66 100 82 T126 72"/><path class="s" d="M168 108 Q186 116 184 138"/>`,
+ camera:`<path class="f1 s" d="M70 44 L80 28 H118 L128 44"/><rect class="f1 s" x="28" y="42" width="144" height="86" rx="12"/><circle class="f4 s" cx="100" cy="86" r="31"/><circle class="f3 s" cx="100" cy="86" r="20"/><circle class="f1" cx="100" cy="86" r="9"/><rect class="f2" x="140" y="34" width="18" height="8" rx="2"/><circle class="f3" cx="46" cy="58" r="5"/>`,
+ airbrush:`<rect class="f1 s" x="20" y="86" width="74" height="48" rx="8"/><circle class="f4 s" cx="76" cy="104" r="9"/><path class="s thin" d="M76 104 l4 -5"/><path class="s" d="M94 116 Q132 128 134 100"/><path class="f4 s" d="M118 94 L176 40 L184 48 L128 102 Z"/><path class="f2 s" d="M150 62 L142 46 H162 Z"/><circle class="fl" cx="190" cy="32" r="1.6"/><circle class="fl" cx="194" cy="40" r="1.6"/><circle class="fl" cx="186" cy="26" r="1.6"/>`,
+ tablet:`<rect class="f1 s" x="20" y="32" width="136" height="94" rx="10"/><rect class="f3" x="42" y="44" width="104" height="70" rx="3"/>${grid(28,52,1,4,0,14,8,9,'f2')}<path class="s thin" d="M54 98 Q76 60 94 84 T134 66"/><path class="f4 s" d="M150 122 L182 56 L189 59 L158 126 Z"/>`,
+ parcel:`<path class="f3 s" d="M52 58 L100 38 L148 58 L100 78 Z"/><path class="f4 s" d="M52 58 V112 L100 132 V78 Z"/><path class="f2 s" d="M148 58 V112 L100 132 V78 Z"/><path class="s" d="M76 48 L124 68 V88"/><path class="f4 s" d="M128 96 L160 84 L172 96 L140 108 Z"/><circle class="fl" cx="162" cy="92" r="2.5"/><path class="s thin" d="M162 92 Q176 76 168 62"/>`,
+ portfolio:`<path class="s" d="M80 40 Q80 18 100 18 Q120 18 120 40"/><rect class="f1 s" x="22" y="38" width="156" height="100" rx="8"/><path class="s4 dash" d="M32 48 H168 V128"/><rect class="f2" x="44" y="70" width="64" height="40" rx="4"/><path class="s4" d="M54 84 H96 M54 94 H84"/>`
+};
+function art(item,extra=''){return `<div class="art" data-cat="${item.cat}" ${extra}><svg class="ill" viewBox="0 0 200 150" role="img" aria-label="Illustration of ${item.name}">${ART[item.art||item.id]||ART.parcel}</svg></div>`}
+
+/* ---------- Helpers ---------- */
+const $=s=>document.querySelector(s);
+const today=new Date();today.setHours(0,0,0,0);
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const parseISO=s=>{if(!s)return null;const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+const fmt=d=>d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
+const money=n=>'EGP '+n.toLocaleString('en-US');
+const price=(it,p)=>Math.round(it.day*PERIODS[p].mult/5)*5;
+const freeFrom=it=>addDays(today,it.booked);
+const availOn=(it,d)=>d>=freeFrom(it);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const byId=id=>ITEMS.find(i=>i.id===id);
+function pill(it,d){
+  const date=d||today;
+  if(availOn(it,date)) return it.stock<=2?`<span class="pill warn">${it.stock} left</span>`:`<span class="pill ok">Available</span>`;
+  return `<span class="pill bad">Free from ${freeFrom(it).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</span>`;
+}
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('show'),2600)}
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+function card(it,d){
+  return `<button class="card" data-item="${it.id}" aria-label="View details for ${esc(it.name)}">
+    ${art(it)}
+    <div class="card-body">
+      <div class="card-top"><span class="cat-chip">${CATS[it.cat].name}${it.user?' · <span class="user-tag">Student listing</span>':''}</span>${pill(it,d)}</div>
+      <h3>${esc(it.name)}</h3>
+      <div class="rate-line">${ratingLine(it.id)}</div>
+      <p class="desc">${esc(it.desc)}</p>
+      <div class="card-foot"><span class="price">${money(it.day)} <small>/ day</small></span><span class="demo-mark">demo price</span></div>
+    </div></button>`;
+}
+
+/* ---------- Routing ---------- */
+const VIEWS=['home','browse','reserve','lend','how','about','contact'];
+function show(v,{scroll=true}={}){
+  if(!VIEWS.includes(v))v='home';
+  VIEWS.forEach(x=>{$('#view-'+x).hidden=x!==v});
+  document.querySelectorAll('nav.main button').forEach(b=>{if(b.dataset.go===v)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
+  $('#mainNav').classList.remove('open');$('#menuBtn').setAttribute('aria-expanded','false');
+  if(v==='browse')renderBrowse();
+  if(v==='reserve')renderSummary();
+  if(v==='lend')renderLendPreview();
+  if(scroll)window.scrollTo({top:0,behavior:'auto'});
+}
+function go(v){if(location.hash.slice(1)===v)show(v);else location.hash=v}
+window.addEventListener('hashchange',()=>show(location.hash.slice(1)));
+
+/* ---------- Home ---------- */
+const STEPS=[
+ {t:'Find an item',p:'Search the catalogue or browse by faculty. Each item shows its daily price, rental periods and when it is free.',li:['Filter by category and budget','Check availability for your date'],ic:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>'},
+ {t:'Reserve it',p:'Choose how long you need it and a pickup date, then collect it from your faculty hub with your student card.',li:['1 day up to 1 month','Pay rental + refundable deposit at pickup'],ic:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8 15l2 2 4-4"/>'},
+ {t:'Return after use',p:'Bring the item back to any hub by your return date. Staff check it with you and refund your deposit on the spot.',li:['Condition checked with you','Deposit refunded at return'],ic:'<path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 010 10h-4"/>'}
+];
+function stepsHTML(full){return STEPS.map((s,i)=>`<div class="step"><span class="step-num">Step ${i+1} of 3</span><div class="ic"><svg viewBox="0 0 24 24">${s.ic}</svg></div><h3>${s.t}</h3><p>${s.p}</p>${full?`<ul>${s.li.map(l=>`<li>${l}</li>`).join('')}</ul>`:''}</div>`).join('')}
+const CAT_GLYPH={medical:'<path d="M12 4v16M4 12h16"/><rect x="3" y="3" width="18" height="18" rx="4"/>',engineering:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>',art:'<path d="M12 3a9 9 0 100 18c1.5 0 2-1 2-2s-1-1.5-1-2.5 1-1.5 2-1.5h2a4 4 0 004-4c0-4.5-4-8-9-8z"/><circle cx="7.5" cy="11" r="1.2"/><circle cx="11" cy="7.5" r="1.2"/><circle cx="16" cy="8.5" r="1.2"/>'};
+const CAT_TINT={medical:'var(--tint-medical)',engineering:'var(--tint-engineering)',art:'var(--tint-art)'};
+function renderHome(){
+  const shelf=['stetho','draft','easel'].map(byId);
+  $('#heroShelf').innerHTML=shelf.map(it=>`<button class="shelf-card" data-item="${it.id}">${art(it)}<strong>${esc(it.name)}</strong><span class="mono">${money(it.day)} / day</span></button>`).join('')+`<span class="shelf-note">demo prices</span>`;
+  $('#heroMeta').innerHTML=`<span><b>${ITEMS.length}</b> sample items</span><span><b>3</b> faculties</span><span><b>1 day</b> to <b>1 month</b> rentals</span>`;
+  $('#catTiles').innerHTML=Object.entries(CATS).map(([k,c])=>{const its=ITEMS.filter(i=>i.cat===k);const min=Math.min(...its.map(i=>i.day));
+    return `<button class="cat-tile" data-cat="${k}"><h3>${c.name}</h3><span class="glyph" style="background:${CAT_TINT[k]}"><svg viewBox="0 0 24 24">${CAT_GLYPH[k]}</svg></span><span class="count">${its.length} items</span><p>${c.blurb}</p><span class="from">From ${money(min)} / day →</span></button>`}).join('');
+  $('#featuredGrid').innerHTML=['micro','calc','meter','tablet'].map(id=>card(byId(id))).join('');
+  const c=byId('calc'),m=byId('micro');const wk=price(c,'w1'),wk2=price(m,'w1');
+  $('#homeBand').innerHTML=`<div><p class="eyebrow">Why rent?</p><h2 style="margin-top:8px">A week with a graphing calculator costs ${money(wk)}. Buying one costs about ${money(c.buy)}.</h2><p>Most course tools are needed for a few weeks a year. Renting puts that money back in your pocket, and the tool goes on to help the next student.</p><div class="hero-actions"><button class="btn btn-teal" data-go="browse">Explore Items</button></div></div>
+  <div class="compare">${[[c,wk],[m,wk2]].map(([it,r])=>`<div class="bar-row"><div class="lbl"><span>${esc(it.name)}: buy (est.)</span><span class="mono">${money(it.buy)}</span></div><div class="bar"><i class="buy" style="width:100%"></i></div></div><div class="bar-row"><div class="lbl"><span>${esc(it.name)}: rent 1 week</span><span class="mono">${money(r)}</span></div><div class="bar"><i class="rent" style="width:${Math.max(1.5,r/it.buy*100).toFixed(1)}%"></i></div></div>`).join('')}<span style="font-size:.78rem;color:var(--band-muted)">Demo prices. Purchase prices are rough estimates.</span></div>`;
+  $('#homeSteps').innerHTML=stepsHTML(false);
+  $('#howSteps').innerHTML=stepsHTML(true);
+}
+
+/* ---------- Browse ---------- */
+const state={q:'',cat:'all',max:80,date:'',only:false,sort:'rec'};
+function renderChips(){
+  const opts=[['all','All']].concat(Object.entries(CATS).map(([k,c])=>[k,c.name]));
+  $('#catChips').innerHTML=opts.map(([k,n])=>`<button type="button" class="chip" data-chip="${k}" aria-pressed="${state.cat===k}">${n}</button>`).join('');
+}
+function renderBrowse(){
+  renderChips();
+  const d=parseISO(state.date);const q=state.q.trim().toLowerCase();
+  let list=ITEMS.filter(it=>(state.cat==='all'||it.cat===state.cat)&&it.day<=state.max&&(!q||(it.name+' '+it.desc+' '+it.tags+' '+CATS[it.cat].name).toLowerCase().includes(q))&&(!state.only||!d||availOn(it,d)));
+  if(state.sort==='low')list.sort((a,b)=>a.day-b.day);
+  if(state.sort==='high')list.sort((a,b)=>b.day-a.day);
+  if(state.sort==='avail')list.sort((a,b)=>a.booked-b.booked);
+  if(state.sort==='rated')list.sort((a,b)=>{const x=revStats(a.id),y=revStats(b.id);return (y.avg-x.avg)||(y.n-x.n)});
+  $('#resultCount').textContent=`${list.length} ${list.length===1?'item':'items'}`;
+  $('#resultNote').textContent=d?`· availability shown for ${fmt(d)}`:'· availability shown for today';
+  $('#browseGrid').innerHTML=list.length?list.map(it=>card(it,d)).join(''):`<div class="empty"><h3>No items match these filters</h3><p>Try a different search word, raise the price limit or choose another date.</p><button class="btn btn-ghost btn-sm" style="margin-top:14px" id="emptyReset">Clear filters</button></div>`;
+  $('#maxPriceOut').textContent=state.max>=80?'Any price':`up to ${money(state.max)}`;
+}
+function setCat(c){state.cat=c;renderBrowse()}
+$('#q').addEventListener('input',e=>{state.q=e.target.value;renderBrowse()});
+$('#sort').addEventListener('change',e=>{state.sort=e.target.value;renderBrowse()});
+$('#maxPrice').addEventListener('input',e=>{state.max=+e.target.value;renderBrowse()});
+$('#needDate').min=iso(today);$('#needDate').max=iso(addDays(today,60));
+$('#needDate').addEventListener('change',e=>{state.date=e.target.value;renderBrowse()});
+$('#onlyAvail').addEventListener('change',e=>{state.only=e.target.checked;if(state.only&&!state.date){state.date=iso(today);$('#needDate').value=state.date}renderBrowse()});
+function resetFilters(){Object.assign(state,{q:'',cat:'all',max:80,date:'',only:false,sort:'rec'});$('#q').value='';$('#sort').value='rec';$('#maxPrice').value=80;$('#needDate').value='';$('#onlyAvail').checked=false;renderBrowse()}
+$('#resetFilters').addEventListener('click',resetFilters);
+$('#filterToggle').addEventListener('click',e=>{const f=$('#filters');f.classList.toggle('open');e.currentTarget.setAttribute('aria-expanded',f.classList.contains('open'))});
+$('#heroSearch').addEventListener('submit',e=>{e.preventDefault();state.q=$('#heroQ').value;$('#q').value=state.q;go('browse')});
+
+/* ---------- Detail ---------- */
+const dlg=$('#detail');
+function openDetail(id,opts){
+  const it=byId(id);if(!it)return;
+  const d=parseISO(state.date);
+  dlg.innerHTML=`<button class="close-x" data-close aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <div class="detail-grid">${art(it)}
+    <div class="detail-body">
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="cat-chip">${CATS[it.cat].name}</span>${pill(it,d)}</div>
+      <h2 id="dTitle">${esc(it.name)}</h2>
+      <button class="rate-line linkbtn" style="text-decoration:none;padding:0" data-scroll-reviews aria-label="Jump to reviews">${ratingLine(it.id)}</button>
+      <p class="muted">${esc(it.desc)}</p>
+      <div><p class="cat-chip" style="margin-bottom:6px">In the box</p><ul class="includes">${it.includes.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>
+      <table class="periods"><thead><tr><th>Rental period</th><th>Demo price</th></tr></thead><tbody>${it.periods.map(p=>`<tr><td>${PERIODS[p].label}</td><td class="mono">${money(price(it,p))}</td></tr>`).join('')}</tbody></table>
+      <div class="facts">
+        <div class="fact"><div class="k">Refundable deposit</div><div class="v mono">${money(it.deposit)}</div></div>
+        <div class="fact"><div class="k">Next free</div><div class="v">${it.booked?fmt(freeFrom(it)):'Today'}</div></div>
+        <div class="fact"><div class="k">Units in stock</div><div class="v">${it.stock}</div></div>
+        ${it.user?`<div class="fact"><div class="k">Condition</div><div class="v">${esc(it.condition)}</div></div>`:`<div class="fact"><div class="k">Buying new (est.)</div><div class="v mono">${money(it.buy)}</div></div>`}
+      </div>
+      ${it.user?`<p class="muted" style="font-size:.9rem">Listed by ${esc(it.owner)}, a student. Collect it from: ${esc(it.hub)}.</p>`:''}
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px"><button class="btn btn-primary" data-reserve="${it.id}">Reserve this item</button><button class="btn btn-ghost" data-close>Keep browsing</button></div>
+      <p class="demo-mark">Sample item. Prices and availability are for demonstration only.</p>
+    </div></div>
+  <section class="reviews" id="reviews" aria-labelledby="revTitle"></section>`;
+  revCtx={id:it.id,rating:0,ref:'',all:false,open:!!(opts&&opts.review),pref:opts&&opts.review||''};
+  renderReviews();
+  if(typeof dlg.showModal==='function'){try{dlg.showModal()}catch(e){dlg.setAttribute('open','')}}else dlg.setAttribute('open','');
+  dlg.scrollTop=0;
+  if(opts&&opts.review)setTimeout(()=>{const f=$('#revForm');if(f)f.scrollIntoView({block:'center'})},30);
+}
+function closeDetail(){if(dlg.open){try{dlg.close()}catch(e){dlg.removeAttribute('open')}}}
+dlg.addEventListener('click',e=>{if(e.target===dlg)closeDetail()});
+
+/* ---------- Reservation ---------- */
+const rItem=$('#rItem'),rPeriod=$('#rPeriod'),rDate=$('#rDate');
+function buildItemOptions(){
+  const cur=rItem.value;
+  rItem.innerHTML=`<option value="">Choose an item…</option>`+Object.entries(CATS).map(([k,c])=>`<optgroup label="${c.name}">${ITEMS.filter(i=>i.cat===k).map(i=>`<option value="${i.id}">${esc(i.name)}${i.user?' (student listing)':''}, ${money(i.day)}/day</option>`).join('')}</optgroup>`).join('');
+  rItem.value=byId(cur)?cur:'';
+}
+buildItemOptions();
+rDate.min=iso(today);rDate.max=iso(addDays(today,60));
+function fillPeriods(){
+  const it=byId(rItem.value);const prev=rPeriod.value;
+  if(!it){rPeriod.innerHTML=`<option value="">Choose an item first</option>`;rPeriod.disabled=true;return}
+  rPeriod.disabled=false;
+  rPeriod.innerHTML=it.periods.map(p=>`<option value="${p}">${PERIODS[p].label}: ${money(price(it,p))}</option>`).join('');
+  if(it.periods.includes(prev))rPeriod.value=prev;else if(it.periods.includes('w1'))rPeriod.value='w1';
+}
+function dateCheck(){
+  const it=byId(rItem.value),d=parseISO(rDate.value);
+  const hint=$('#rDateHint'),err=$('#rDateErr');err.hidden=true;rDate.removeAttribute('aria-invalid');
+  if(!it){hint.textContent='';return true}
+  hint.textContent=it.booked?`This item is free from ${fmt(freeFrom(it))}.`:'Available from today.';
+  if(d&&!availOn(it,d)){err.textContent=`Already reserved on that day. Pick ${fmt(freeFrom(it))} or later.`;err.hidden=false;rDate.setAttribute('aria-invalid','true');return false}
+  return true;
+}
+function renderSummary(){
+  const it=byId(rItem.value),p=rPeriod.value,d=parseISO(rDate.value);
+  if(!it){$('#summary').innerHTML=`<p class="eyebrow">Summary</p><h3 style="margin:8px 0 6px">No item selected</h3><p class="muted">Choose an item to see the rental price, deposit and return date. You can also start from <button class="linkbtn" data-go="browse">Browse Items</button>.</p>${noticeHTML()}`;return}
+  const cost=p?price(it,p):0;const ret=d&&p?addDays(d,PERIODS[p].days):null;const ok=d?availOn(it,d):true;
+  $('#summary').innerHTML=`<p class="eyebrow" style="margin-bottom:12px">Summary</p>
+   <div class="sum-item">${art(it)}<div><b>${esc(it.name)}</b><div class="muted" style="font-size:.88rem">${CATS[it.cat].name} · ${pill(it,d)}</div></div></div>
+   <div class="sum-rows">
+    <div class="sum-row"><span>Duration</span><span>${p?PERIODS[p].label:'–'}</span></div>
+    <div class="sum-row"><span>Pickup</span><span>${d?fmt(d):'Choose a date'}</span></div>
+    <div class="sum-row"><span>Return by</span><span>${ret?fmt(ret):'–'}</span></div>
+    <div class="sum-row"><span>Rental (demo price)</span><span class="mono">${money(cost)}</span></div>
+    <div class="sum-row"><span>Refundable deposit</span><span class="mono">${money(it.deposit)}</span></div>
+   </div>
+   <div class="sum-total"><span>Due at pickup</span><span class="mono">${money(cost+it.deposit)}</span></div>
+   <p class="muted" style="font-size:.84rem;margin-top:6px">You get ${money(it.deposit)} back when you return the item.</p>
+   ${!ok?`<p class="err" style="margin-top:10px">Not available on the chosen date.</p>`:''}
+   ${noticeHTML()}`;
+}
+function noticeHTML(){return `<div class="notice"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span>Demo only. Submitting this form does not reserve an item, take a payment or create an account.</span></div>`}
+rItem.addEventListener('change',()=>{fillPeriods();dateCheck();setErr('rItem','');renderSummary()});
+rPeriod.addEventListener('change',renderSummary);
+rDate.addEventListener('change',()=>{dateCheck();renderSummary()});
+function setErr(id,msg){const e=$('#'+id+'Err'),f=$('#'+id);if(!e)return;e.textContent=msg;e.hidden=!msg;if(f){if(msg)f.setAttribute('aria-invalid','true');else f.removeAttribute('aria-invalid')}}
+function startReserve(id){
+  closeDetail();
+  $('#resForm').hidden=false;$('#resDone').hidden=true;
+  rItem.value=id;fillPeriods();
+  const it=byId(id);
+  if(it.user&&it.hub)$('#rHub').value=it.hub;
+  if(!rDate.value||!availOn(it,parseISO(rDate.value)))rDate.value=state.date&&availOn(it,parseISO(state.date))?state.date:iso(freeFrom(it));
+  dateCheck();go('reserve');renderSummary();
+}
+const emailOK=v=>/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+$('#resForm').addEventListener('submit',e=>{
+  e.preventDefault();let bad=null;
+  const it=byId(rItem.value);
+  if(!it){setErr('rItem','Choose the item you want to borrow.');bad=bad||rItem}else setErr('rItem','');
+  if(!rDate.value){$('#rDateErr').textContent='Choose a pickup date.';$('#rDateErr').hidden=false;rDate.setAttribute('aria-invalid','true');bad=bad||rDate}
+  else{const d=parseISO(rDate.value);if(d<today||d>addDays(today,60)){$('#rDateErr').textContent='Pick a date between today and 60 days from now.';$('#rDateErr').hidden=false;bad=bad||rDate}else if(!dateCheck())bad=bad||rDate}
+  const name=$('#rName').value.trim();if(name.length<2){setErr('rName','Enter your full name.');bad=bad||$('#rName')}else setErr('rName','');
+  const em=$('#rEmail').value.trim();if(!emailOK(em)){setErr('rEmail','Enter a valid email, for example name@university.edu.eg.');bad=bad||$('#rEmail')}else setErr('rEmail','');
+  if(!$('#rAgree').checked){$('#rAgreeErr').textContent='Tick this box to confirm you understand this is a demo.';$('#rAgreeErr').hidden=false;bad=bad||$('#rAgree')}else $('#rAgreeErr').hidden=true;
+  if(bad){bad.focus();return}
+  const p=rPeriod.value,d=parseISO(rDate.value),ret=addDays(d,PERIODS[p].days);
+  const ref='DEMO-'+Math.random().toString(36).slice(2,6).toUpperCase();
+  const rec={ref,item:it.id,period:p,pickup:rDate.value,ret:iso(ret),hub:$('#rHub').value,name,faculty:$('#rFaculty').value,cost:price(it,p),deposit:it.deposit,status:'active'};
+  const list=store.get('campuskit-demo-res',[]);list.unshift(rec);store.set('campuskit-demo-res',list.slice(0,10));
+  $('#resForm').hidden=true;const done=$('#resDone');done.hidden=false;
+  done.innerHTML=`<div class="badge"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></div>
+   <h2 style="font-size:1.6rem">Demo reservation recorded, ${esc(name.split(' ')[0])}</h2>
+   <p class="muted" style="margin-top:8px">Reference <span class="ref">${ref}</span>. In a live version you would get a confirmation email and pick up the item at the hub. Nothing has actually been booked or paid.</p>
+   <div class="sum-rows" style="margin-top:16px;border-top:1px solid var(--line)">
+    <div class="sum-row"><span>Item</span><span>${esc(it.name)}</span></div>
+    <div class="sum-row"><span>Pickup</span><span>${fmt(d)}</span></div>
+    <div class="sum-row"><span>Return by</span><span>${fmt(ret)}</span></div>
+    <div class="sum-row"><span>Pickup point</span><span style="text-align:right">${esc(rec.hub)}</span></div>
+    <div class="sum-row"><span>Due at pickup (demo)</span><span class="mono">${money(rec.cost+rec.deposit)}</span></div>
+   </div>
+   <div class="hero-actions"><button class="btn btn-primary" id="again">Make another demo reservation</button><button class="btn btn-ghost" data-go="browse">Browse more items</button></div>`;
+  renderMyRes();window.scrollTo({top:0});toast('Demo reservation saved in this browser');
+});
+$('#resDone').addEventListener('click',e=>{if(e.target.id==='again'){$('#resForm').reset();rItem.value='';fillPeriods();dateCheck();$('#resDone').hidden=true;$('#resForm').hidden=false;renderSummary();window.scrollTo({top:0})}});
+function renderMyRes(){
+  const list=store.get('campuskit-demo-res',[]);const box=$('#myRes');
+  if(!list.length){box.innerHTML='';return}
+  box.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h3 style="font-size:1.2rem">Your demo reservations</h3><button class="linkbtn" id="clearRes">Clear all</button></div>
+  <p class="muted" style="font-size:.86rem">Saved only in this browser so you can show the flow. Not sent anywhere.</p>
+  <div class="res-list">${list.map((r,i)=>{const it=byId(r.item);return it?`<div class="res-row"><div><b>${esc(it.name)}</b><span class="muted">${PERIODS[r.period].label} · ${fmt(parseISO(r.pickup))} to ${fmt(parseISO(r.ret))}${r.status==='returned'?' · Returned':''}</span></div><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">${r.status==='returned'?(r.reviewed?'<span class="pill ok">Feedback sent</span>':`<button class="btn btn-primary btn-sm" data-review-item="${r.item}" data-review-ref="${r.ref}">Leave feedback</button>`):`<button class="btn btn-ghost btn-sm" data-return="${i}">Mark as returned (demo)</button>`}<span class="ref">${r.ref}</span><button class="linkbtn" data-remove="${i}">Remove</button></div></div>`:''}).join('')}</div>`;
+}
+$('#myRes').addEventListener('click',e=>{
+  if(e.target.id==='clearRes'){store.set('campuskit-demo-res',[]);renderMyRes();toast('Demo reservations cleared')}
+  const rt=e.target.dataset.return;if(rt!==undefined){const l=store.get('campuskit-demo-res',[]);if(l[+rt]){l[+rt].status='returned';l[+rt].returned=iso(today);store.set('campuskit-demo-res',l);renderMyRes();toast('Marked as returned (demo). You can now leave feedback.')}return}
+  const ri=e.target.dataset.reviewItem;if(ri){openDetail(ri,{review:e.target.dataset.reviewRef});return}
+  const r=e.target.dataset.remove;if(r!==undefined){const l=store.get('campuskit-demo-res',[]);l.splice(+r,1);store.set('campuskit-demo-res',l);renderMyRes()}
+});
+
+
+/* ---------- Reviews & ratings (demo, stored in this browser only) ---------- */
+const RKEY='campuskit-demo-reviews';
+const COND=['Like new','Good','Minor wear','Damaged or needs attention'];
+const RATE_LABEL=['','Poor','Fair','Good','Very good','Excellent'];
+// [item, rating, name, daysAgo, condition, comment, completeFlag(optional)]
+const SEED_RAW=[
+['stetho',5,'Nour A., Medicine, 4th year',6,'Like new','Clear sound, even on the quiet heart sounds during our OSCE practice. Ear tips were fresh and it came in a clean pouch.'],
+['stetho',5,'Omar H., Medicine, 3rd year',19,'Good','Borrowed it for a week before clinical rotations started. Much cheaper than buying one I would use for a month.'],
+['stetho',4,'Salma R., Dentistry, 2nd year',41,'Good','Works well. The tubing had a few scuffs but nothing that affected the sound. Pickup at the hub took two minutes.'],
+['stetho',5,'Youssef M., Pharmacy, 3rd year',63,'Like new','Exactly as described and spotless. Would rent again.'],
+['skeleton',5,'Mariam K., Medicine, 1st year',9,'Good','Perfect for revising the bones at home. The numbering is easy to follow and the stand rolls smoothly.'],
+['skeleton',4,'Karim S., Dentistry, 2nd year',27,'Good','Great for the skull and mandible. One finger joint was a bit loose, so handle it gently. The bone index sheet helped a lot.'],
+['skeleton',4,'Hana E., Medicine, 1st year',52,'Minor wear','Very useful for my anatomy exam. A little dusty when I picked it up but nothing serious.'],
+['dissect',5,'Ahmed F., Medicine, 1st year',4,'Like new','Sharp new blades and everything was in the zip case. Used it for the whole practical week.'],
+['dissect',4,'Farida N., Pharmacy, 2nd year',22,'Good','Good quality steel. The scissors were slightly stiff at first but fine after a few cuts.'],
+['dissect',5,'Mostafa G., Dentistry, 1st year',47,'Good','Saved me buying a kit I would only use once. Clean and complete.'],
+['bp',4,'Laila T., Medicine, 3rd year',12,'Good','The gauge reads accurately and the cuff is comfortable. The case zip is a bit worn but it works.'],
+['bp',5,'Adam W., Medicine, 4th year',35,'Like new','Practised for my clinical exam with friends. It was calibrated and the bulb valve held pressure well.'],
+['bp',3,'Rana B., Pharmacy, 4th year',58,'Minor wear','Works, but the cuff Velcro is getting weak and slipped a few times. Fine for practice, not ideal for repeated readings.'],
+['micro',5,'Nada Z., Medicine, 2nd year',8,'Like new','The LED is bright and the slides were already in the set. The focus is smooth and I got clear images at 400x.'],
+['micro',5,'Tarek L., Pharmacy, 3rd year',30,'Good','Used it for the microbiology lab report. Calibrated and clean, with the oil included.'],
+['micro',4,'Dina O., Medicine, 2nd year',66,'Good','Great value for a few days. I would have liked one more prepared slide, but the optics were sharp.'],
+['suture',5,'Jana I., Medicine, 4th year',7,'Like new','The pad has plenty of unused wounds left. I practised subcuticular stitches all week before my surgery rotation.'],
+['suture',4,'Seif D., Medicine, 3rd year',25,'Good','Good set. Needle holder is a bit stiff but it does the job. Scissors were sharp.'],
+['suture',5,'Malak P., Dentistry, 2nd year',49,'Like new','Very helpful and very clean. Would recommend to anyone preparing for skills exams.'],
+['calc',5,'Ali Y., Engineering, 2nd year',3,'Like new','Reset and ready, batteries were fresh. Got me through the calculus midterm without buying one.'],
+['calc',4,'Reem Q., Engineering, 1st year',16,'Good','Works perfectly. Screen has a couple of tiny scratches. The quick-start card was handy.'],
+['calc',5,'Hassan V., Engineering, 3rd year',38,'Good','Used it for statistics. Everything was clean and the keys all worked.'],
+['calc',5,'Yara C., Architecture, 1st year',70,'Like new','Easy pickup and a good price for the week of exams.'],
+['draft',5,'Amr J., Architecture, 1st year',10,'Good','The parallel motion is smooth and the board holds the angle well. Carry handle is sturdy.'],
+['draft',4,'Lina U., Engineering, 1st year',33,'Minor wear','Good for technical drawing. A few pencil marks on the board surface but nothing that affects the paper.'],
+['draft',4,'Hossam X., Architecture, 2nd year',55,'Good','Fits on my desk and handled the trip home on the metro. One set square had a small nick on the edge.'],
+['meter',5,'Ziad K., Engineering, 3rd year',5,'Like new','Spare fuse and leads were included. Readings matched the lab bench meter.'],
+['meter',5,'Menna S., Engineering, 2nd year',21,'Good','Perfect for the circuits lab. Auto-range worked well and the screen was clear.'],
+['meter',4,'Bassem A., Engineering, 4th year',44,'Good','Does what I needed. The probe tips are a bit worn, but the readings were fine.'],
+['arduino',5,'Kareem R., Engineering, 4th year',14,'Like new','Everything was there: board, sensors, motor and cables. Saved me a lot for my graduation prototype.'],
+['arduino',4,'Sara M., Engineering, 3rd year',37,'Good','Good starter kit. The breadboard is slightly loose in places, so I used a different one for the final circuit.'],
+['arduino',3,'Hady T., Engineering, 2nd year',61,'Minor wear','Worked for my project, but a couple of jumper wires were missing from the count. Please check the box before you leave the hub.','missing'],
+['caliper',5,'Eman F., Engineering, 3rd year',11,'Like new','Accurate to the hundredth and it zeroes properly. Fresh battery was a nice touch.'],
+['caliper',4,'Wael H., Engineering, 2nd year',29,'Good','Good for the metrology lab. Case has a cracked corner but the caliper itself is fine.'],
+['caliper',5,'Maya D., Engineering, 4th year',53,'Good','Smooth jaws and a clear display. Very easy rental.'],
+['solder',4,'Moaz E., Engineering, 3rd year',13,'Good','Heats up quickly and holds temperature. The sponge needed replacing, so I used my own.'],
+['solder',5,'Heba L., Engineering, 2nd year',40,'Like new','Good station and the spare tips were new. Perfect for my PCB project.'],
+['easel',5,'Nermine B., Fine Arts, 2nd year',15,'Good','Holds a big canvas steadily and folds up small enough for the bus. The shoulder bag is comfortable.'],
+['easel',4,'Fady M., Fine Arts, 3rd year',34,'Good','Sturdy and light. One leg clamp is stiff, so tighten it carefully.'],
+['easel',5,'Judy S., Architecture, 1st year',59,'Like new','Used it for outdoor painting assignments. It stayed steady even in a light breeze.'],
+['lightbox',5,'Nadine H., Fine Arts, 2nd year',2,'Like new','Even light, no hot spots, and the dimmer is very smooth. Great for my animation exercise.'],
+['lightbox',4,'Ramy A., Fine Arts, 1st year',24,'Good','Thin and bright. The USB cable is short, so I had to sit close to a socket.'],
+['lightbox',5,'Aya W., Architecture, 2nd year',46,'Good','Perfect for tracing my plans. Clean surface and no scratches.'],
+['camera',5,'Malek G., Fine Arts, 4th year',18,'Like new','Both batteries were charged and the lens was spotless. Great for my portfolio shoot.'],
+['camera',4,'Rawan N., Fine Arts, 3rd year',43,'Good','Good beginner camera. The strap is a bit worn, but the body and lens were fine. Memory card was empty and ready.'],
+['camera',5,'Zeyad F., Architecture, 4th year',68,'Good','Documented my project site with it. Easy to use and the bag is well padded.'],
+['airbrush',4,'Salwa K., Fine Arts, 3rd year',20,'Good','The compressor is quiet enough for the studio. Cleaning kit was included. Needle was slightly dirty at pickup, so I cleaned it first.'],
+['airbrush',5,'Ibrahim R., Fine Arts, 2nd year',51,'Like new','Smooth spray and good control on fine lines. Great for model finishing.'],
+['tablet',5,'Jomana T., Fine Arts, 2nd year',17,'Like new','Pressure sensitivity feels natural and the pen has no lag. Spare nibs were included.'],
+['tablet',4,'Omar B., Architecture, 3rd year',39,'Good','Works well with my drawing software. The surface has a few light scratches that do not affect drawing.'],
+['tablet',5,'Lamia S., Fine Arts, 4th year',64,'Good','Used it for my animation course. Setup took five minutes.'],
+['portfolio',5,'Khaled M., Architecture, 5th year',1,'Like new','Carried my boards to the jury in the rain and nothing got wet. The strap is comfortable.'],
+['portfolio',4,'Mai Z., Fine Arts, 4th year',28,'Good','Good size and very sturdy. The inner sleeves are slightly creased but fine.'],
+['portfolio',5,'Sherif A., Architecture, 4th year',56,'Good','Cheap, clean and easy to collect. It fit my A1 sheets perfectly.']
+];
+const SEED_REVS=SEED_RAW.map((r,i)=>({id:'seed'+i,item:r[0],rating:r[1],name:r[2],date:iso(addDays(today,-r[3])),cond:r[4],comment:r[5],complete:r[6]!=='missing',seed:true}));
+const userRevs=()=>store.get(RKEY,[]);
+const itemRevs=id=>[...userRevs(),...SEED_REVS].filter(r=>r.item===id).sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:0);
+function revStats(id){
+  const l=itemRevs(id);const dist=[0,0,0,0,0];l.forEach(r=>{dist[r.rating-1]++});
+  const n=l.length;return {n,dist,avg:n?l.reduce((s,r)=>s+r.rating,0)/n:0,list:l};
+}
+function starsHTML(avg,cls=''){
+  const w=Math.round(avg*10)/10/5*100;
+  return `<span class="stars ${cls}" role="img" aria-label="${avg.toFixed(1)} out of 5 stars"><span class="stars-bg" aria-hidden="true">★★★★★</span><span class="stars-fg" aria-hidden="true" style="width:${w}%">★★★★★</span></span>`;
+}
+function ratingLine(id){
+  const s=revStats(id);
+  return s.n?`${starsHTML(s.avg)} <b class="mono">${s.avg.toFixed(1)}</b> <span class="muted">(${s.n} ${s.n===1?'review':'reviews'})</span>`:`<span class="muted">No reviews yet</span>`;
+}
+const fmtLong=d=>d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+let revCtx={id:'',rating:0,ref:'',all:false,open:false,pref:''};
+function condPill(c){const cls=c==='Like new'||c==='Good'?'ok':c==='Minor wear'?'warn':'bad';return `<span class="pill ${cls}">Condition: ${esc(c)}</span>`}
+function eligibleRentals(id){return store.get('campuskit-demo-res',[]).filter(r=>r.item===id&&r.status==='returned'&&!r.reviewed)}
+function renderReviews(){
+  const box=$('#reviews');if(!box)return;
+  const it=byId(revCtx.id);const s=revStats(revCtx.id);
+  const shown=revCtx.all?s.list:s.list.slice(0,4);
+  const elig=eligibleRentals(revCtx.id);
+  let formPart='';
+  if(elig.length){
+    if(!revCtx.ref||!elig.some(r=>r.ref===revCtx.ref))revCtx.ref=(elig.find(r=>r.ref===revCtx.pref)||elig[0]).ref;
+    if(revCtx.open){
+      const cur=elig.find(r=>r.ref===revCtx.ref);
+      formPart=`<form class="panel rev-form" id="revForm" novalidate>
+        <h4>How was your rental?</h4>
+        ${elig.length>1?`<div class="field"><label for="rvRental">Which rental?</label><select class="input" id="rvRental">${elig.map(r=>`<option value="${r.ref}" ${r.ref===revCtx.ref?'selected':''}>${r.ref}, returned ${fmtLong(parseISO(r.returned||r.ret))}</option>`).join('')}</select></div>`:`<p class="muted" style="font-size:.9rem">Rental <span class="ref">${cur.ref}</span>, returned ${fmtLong(parseISO(cur.returned||cur.ret))}.</p>`}
+        <div class="field"><span class="lbl" id="rvStarLbl">Your rating</span>
+          <div class="star-input" id="starInput" role="radiogroup" aria-labelledby="rvStarLbl">${[1,2,3,4,5].map(n=>`<button type="button" class="star-btn${n<=revCtx.rating?' on':''}" role="radio" aria-checked="${n===revCtx.rating}" tabindex="${n===(revCtx.rating||1)?0:-1}" data-star="${n}" aria-label="${n} ${n===1?'star':'stars'}">★</button>`).join('')}<span class="star-label" id="starLabel" aria-live="polite">${RATE_LABEL[revCtx.rating]||'Tap a star'}</span></div>
+          <span class="err" id="rvRatingErr" hidden></span></div>
+        <div class="two">
+          <div class="field"><label for="rvCond">Condition of the item</label><select class="input" id="rvCond">${COND.map((c,i)=>`<option ${i===1?'selected':''}>${c}</option>`).join('')}</select></div>
+          <div class="field"><label for="rvName">Your name</label><input class="input" id="rvName" autocomplete="name" value="${esc(cur.name||'')}" maxlength="60"><span class="err" id="rvNameErr" hidden></span></div>
+        </div>
+        <label class="check"><input type="checkbox" id="rvComplete" checked> Everything in the box was there and the item was clean</label>
+        <div class="field"><label for="rvComment">Your feedback</label><textarea class="input" id="rvComment" rows="4" maxlength="500" placeholder="How did it work for you? Was it as described? Anything the next student should know?"></textarea>
+          <div style="display:flex;justify-content:space-between;gap:10px"><span class="err" id="rvCommentErr" hidden></span><span class="hint" id="rvCount" style="margin-left:auto">0 / 500</span></div></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-primary" type="submit">Submit review</button><button class="btn btn-ghost" type="button" data-rev-cancel>Cancel</button></div>
+        <p class="demo-mark">Demo only. Your review is saved in this browser and not sent anywhere.</p>
+      </form>`;
+    }else formPart=`<div><button class="btn btn-teal" type="button" data-rev-open>Leave feedback for this rental</button></div>`;
+  }else{
+    formPart=`<div class="rev-gate"><p><b>Rented this item?</b> Feedback opens once a rental is completed. Reserve it, mark it as returned under “Your demo reservations”, then come back here.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-ghost btn-sm" type="button" data-reserve="${revCtx.id}">Reserve this item</button><button class="btn btn-ghost btn-sm" type="button" data-sim-return>Demo shortcut: I have returned this item</button></div></div>`;
+  }
+  box.innerHTML=`<h3 id="revTitle">Reviews and ratings</h3>
+  ${s.n?`<div class="rev-sum"><div><div class="rev-big mono">${s.avg.toFixed(1)}</div>${starsHTML(s.avg,'lg')}<div class="muted" style="font-size:.86rem;margin-top:4px">${s.n} ${s.n===1?'review':'reviews'}</div></div>
+    <div class="dist" aria-label="Rating breakdown">${[5,4,3,2,1].map(n=>`<div class="dist-row"><span>${n} star${n>1?'s':''}</span><div class="bar"><i class="star-fill" style="width:${s.dist[n-1]/s.n*100}%"></i></div><span class="mono">${s.dist[n-1]}</span></div>`).join('')}</div></div>`:`<p class="muted">No reviews yet for ${esc(it?it.name:'this item')}. Be the first to rent it and share how it went.</p>`}
+  ${formPart}
+  ${s.n?`<div class="rev-list">${shown.map(r=>`<article class="rev"><div class="rev-head"><div>${starsHTML(r.rating)} <b style="margin-left:6px">${esc(r.name)}</b></div><span class="rev-meta">${fmtLong(parseISO(r.date))}</span></div>
+    <p>${esc(r.comment)}</p><div class="rev-tags">${condPill(r.cond)}${r.complete?'<span class="pill ok">Complete and clean</span>':'<span class="pill warn">Something was missing</span>'}${r.seed?'':'<span class="pill ok">Your review</span><button class="linkbtn" data-rev-del="'+r.id+'">Delete</button>'}</div></article>`).join('')}</div>
+    ${s.n>4?`<div><button class="btn btn-ghost btn-sm" data-rev-more>${revCtx.all?'Show fewer reviews':`Show all ${s.n} reviews`}</button></div>`:''}
+    <p class="demo-mark">Sample reviews are fictional demo data.</p>`:''}`;
+  const rv=$('#reviews');if(rv)rv.querySelector('h3').textContent='Reviews and ratings';
+}
+function paintStars(n){
+  document.querySelectorAll('#starInput .star-btn').forEach(b=>b.classList.toggle('on',+b.dataset.star<=n));
+  const l=$('#starLabel');if(l)l.textContent=RATE_LABEL[n]||'Tap a star';
+}
+function setRating(n){
+  revCtx.rating=n;
+  document.querySelectorAll('#starInput .star-btn').forEach(b=>{const on=+b.dataset.star===n;b.setAttribute('aria-checked',on);b.tabIndex=on?0:-1});
+  paintStars(n);setErr('rvRating','');
+}
+function refreshRatings(){
+  if($('#view-browse')&&!$('#view-browse').hidden)renderBrowse();
+  renderHome();
+}
+dlg.addEventListener('click',e=>{
+  const t=e.target.closest('[data-star],[data-rev-open],[data-rev-cancel],[data-rev-more],[data-rev-del],[data-sim-return],[data-scroll-reviews]');if(!t)return;
+  if(t.dataset.star){setRating(+t.dataset.star);t.focus();return}
+  if(t.hasAttribute('data-scroll-reviews')){$('#reviews').scrollIntoView({block:'start',behavior:'smooth'});return}
+  if(t.hasAttribute('data-rev-open')){revCtx.open=true;renderReviews();const f=$('#revForm');if(f)f.scrollIntoView({block:'center'});return}
+  if(t.hasAttribute('data-rev-cancel')){revCtx.open=false;revCtx.rating=0;renderReviews();return}
+  if(t.hasAttribute('data-rev-more')){revCtx.all=!revCtx.all;renderReviews();return}
+  if(t.dataset.revDel){store.set(RKEY,userRevs().filter(r=>r.id!==t.dataset.revDel));renderReviews();refreshRatings();toast('Your review was deleted');return}
+  if(t.hasAttribute('data-sim-return')){
+    const it=byId(revCtx.id);const p=it.periods.includes('w1')?'w1':it.periods[0];
+    const pick=addDays(today,-(PERIODS[p].days+1)),ret=addDays(pick,PERIODS[p].days);
+    const list=store.get('campuskit-demo-res',[]);
+    const prev=list.find(r=>r.name);
+    const rec={ref:'DEMO-'+Math.random().toString(36).slice(2,6).toUpperCase(),item:it.id,period:p,pickup:iso(pick),ret:iso(ret),hub:'Main campus hub, Central Library ground floor',name:prev?prev.name:'',faculty:prev?prev.faculty:'',cost:price(it,p),deposit:it.deposit,status:'returned',returned:iso(today)};
+    list.unshift(rec);store.set('campuskit-demo-res',list.slice(0,10));renderMyRes();
+    revCtx.open=true;revCtx.pref=rec.ref;revCtx.ref=rec.ref;renderReviews();
+    const f=$('#revForm');if(f)f.scrollIntoView({block:'center'});
+    toast('Demo rental marked as returned. You can leave feedback now.');
+  }
+});
+dlg.addEventListener('mouseover',e=>{const b=e.target.closest('[data-star]');if(b)paintStars(+b.dataset.star)});
+dlg.addEventListener('mouseout',e=>{const g=e.target.closest('#starInput');if(g&&!g.contains(e.relatedTarget))paintStars(revCtx.rating)});
+dlg.addEventListener('keydown',e=>{
+  const b=e.target.closest('[data-star]');if(!b)return;
+  let n=+b.dataset.star;
+  if(e.key==='ArrowRight'||e.key==='ArrowUp')n=Math.min(5,n+1);
+  else if(e.key==='ArrowLeft'||e.key==='ArrowDown')n=Math.max(1,n-1);
+  else if(e.key==='Home')n=1;else if(e.key==='End')n=5;else return;
+  e.preventDefault();setRating(n);const nb=document.querySelector(`#starInput [data-star="${n}"]`);if(nb)nb.focus();
+});
+dlg.addEventListener('input',e=>{if(e.target.id==='rvComment'){$('#rvCount').textContent=e.target.value.length+' / 500';if(e.target.value.trim().length>=10)setErr('rvComment','')}});
+dlg.addEventListener('change',e=>{if(e.target.id==='rvRental'){revCtx.ref=e.target.value;const r=eligibleRentals(revCtx.id).find(x=>x.ref===revCtx.ref);if(r&&r.name)$('#rvName').value=r.name}});
+dlg.addEventListener('submit',e=>{
+  if(e.target.id!=='revForm')return;
+  e.preventDefault();let bad=null;
+  if(!revCtx.rating){setErr('rvRating','Choose a star rating from 1 to 5.');bad=bad||document.querySelector('#starInput [data-star]')}else setErr('rvRating','');
+  const name=$('#rvName').value.trim();if(name.length<2){setErr('rvName','Enter your name.');bad=bad||$('#rvName')}else setErr('rvName','');
+  const comment=$('#rvComment').value.trim();if(comment.length<10){setErr('rvComment','Write at least a short sentence (10 characters or more).');bad=bad||$('#rvComment')}else setErr('rvComment','');
+  if(bad){bad.focus();return}
+  const res=store.get('campuskit-demo-res',[]);const rental=res.find(r=>r.ref===revCtx.ref);
+  const parts=name.split(/\s+/);const shortName=parts.length>1?`${parts[0]} ${parts[parts.length-1][0].toUpperCase()}.`:parts[0];
+  const full=shortName+(rental&&rental.faculty?', '+rental.faculty:'');
+  const rev={id:'u'+Date.now().toString(36),item:revCtx.id,rating:revCtx.rating,name:full,date:iso(today),cond:$('#rvCond').value,complete:$('#rvComplete').checked,comment,ref:revCtx.ref};
+  store.set(RKEY,[rev,...userRevs()].slice(0,60));
+  if(rental){rental.reviewed=true;store.set('campuskit-demo-res',res);renderMyRes()}
+  revCtx.open=false;revCtx.rating=0;revCtx.all=false;
+  renderReviews();refreshRatings();
+  const hd=$('#dRateTop');
+  document.querySelectorAll('[data-scroll-reviews]').forEach(b=>{b.innerHTML=ratingLine(revCtx.id)});
+  $('#reviews').scrollIntoView({block:'start',behavior:'smooth'});
+  toast('Thank you! Your review is now live (demo).');
+});
+
+/* ---------- List an item ---------- */
+const LKEY='campuskit-demo-listings';
+const lP=$('#lPeriods');
+lP.innerHTML=Object.entries(PERIODS).map(([k,p])=>`<label><input type="checkbox" value="${k}" ${['d1','d3','w1'].includes(k)?'checked':''}> ${p.label}</label>`).join('');
+function lendDraft(){
+  return {id:'preview',user:true,art:'parcel',cat:$('#lCat').value,
+    name:$('#lName').value.trim()||'Your item name',
+    desc:$('#lDesc').value.trim()||'Your description will appear here.',
+    day:Math.max(0,Math.round(+$('#lDay').value||0)),deposit:Math.max(0,Math.round(+$('#lDep').value||0)),
+    periods:[...lP.querySelectorAll('input:checked')].map(i=>i.value),booked:0,stock:1,
+    condition:$('#lCond').value,includes:$('#lIncl').value.split(',').map(s=>s.trim()).filter(Boolean).slice(0,8),
+    tags:'',hub:$('#lHub').value,owner:$('#lOwner').value.trim()};
+}
+function priceHint(){
+  const cat=$('#lCat').value;const its=ITEMS.filter(i=>i.cat===cat&&!i.user);
+  $('#lPriceHint').textContent=`Similar ${CATS[cat].name.toLowerCase()} items rent for ${money(Math.min(...its.map(i=>i.day)))} to ${money(Math.max(...its.map(i=>i.day)))} per day.`;
+}
+function renderLendPreview(){
+  priceHint();
+  const it=lendDraft();
+  const rows=it.day&&it.periods.length?it.periods.map(p=>{const r=price(it,p);return `<div class="sum-row"><span>${PERIODS[p].label}: ${money(r)}</span><span class="mono">you earn ${money(Math.round(r*(1-PLATFORM_FEE)))}</span></div>`}).join(''):'<p class="muted" style="font-size:.9rem">Enter a daily price and choose rental periods to see what you would earn.</p>';
+  $('#lendPreview').innerHTML=`<p class="eyebrow" style="margin-bottom:12px">Live preview</p><div class="preview-card" aria-hidden="true">${card(it)}</div>
+   <p class="cat-chip" style="margin-top:18px">Estimated earnings per rental</p><div class="sum-rows">${rows}</div>
+   <p class="muted" style="font-size:.84rem;margin-top:10px">Example business model: CampusKit keeps ${PLATFORM_FEE*100}% to cover hub staff, cleaning and condition checks. Demo figures only.</p>
+   <div class="notice"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span>Demo only. Publishing adds the item to Browse Items in this browser. No real listing, rentals or payouts are created.</span></div>`;
+}
+['lName','lDesc','lDay','lDep','lCat','lCond','lIncl','lHub','lOwner'].forEach(id=>{$('#'+id).addEventListener('input',renderLendPreview);$('#'+id).addEventListener('change',renderLendPreview)});
+lP.addEventListener('change',renderLendPreview);
+function saveListings(){store.set(LKEY,ITEMS.filter(i=>i.user))}
+$('#lendForm').addEventListener('submit',e=>{
+  e.preventDefault();let bad=null;
+  const name=$('#lName').value.trim(),desc=$('#lDesc').value.trim(),dv=+$('#lDay').value,dep=$('#lDep').value===''?0:+$('#lDep').value;
+  const periods=[...lP.querySelectorAll('input:checked')];
+  if(name.length<3){setErr('lName','Enter the item name (at least 3 characters).');bad=bad||$('#lName')}else setErr('lName','');
+  if(desc.length<15){setErr('lDesc','Describe the item in at least 15 characters.');bad=bad||$('#lDesc')}else setErr('lDesc','');
+  if(!dv||dv<15||dv>300){setErr('lDay','Set a daily price between EGP 15 and EGP 300.');bad=bad||$('#lDay')}else setErr('lDay','');
+  if(isNaN(dep)||dep<0||dep>500){setErr('lDep','Keep the deposit small: between EGP 0 and EGP 500.');bad=bad||$('#lDep')}else setErr('lDep','');
+  if(!periods.length){$('#lPeriodsErr').textContent='Choose at least one rental period.';$('#lPeriodsErr').hidden=false;bad=bad||lP.querySelector('input')}else $('#lPeriodsErr').hidden=true;
+  const owner=$('#lOwner').value.trim();if(owner.length<2){setErr('lOwner','Enter your name.');bad=bad||$('#lOwner')}else setErr('lOwner','');
+  if(!emailOK($('#lEmail').value.trim())){setErr('lEmail','Enter a valid email, for example name@university.edu.eg.');bad=bad||$('#lEmail')}else setErr('lEmail','');
+  if(!$('#lAgree').checked){$('#lAgreeErr').textContent='Tick this box to confirm you understand this is a demo.';$('#lAgreeErr').hidden=false;bad=bad||$('#lAgree')}else $('#lAgreeErr').hidden=true;
+  if(bad){bad.focus();return}
+  const item=Object.assign(lendDraft(),{id:'u'+Date.now().toString(36),buy:0});
+  ITEMS.push(item);saveListings();buildItemOptions();renderHome();renderMyListings();
+  $('#lendForm').hidden=true;const done=$('#lendDone');done.hidden=false;
+  done.innerHTML=`<div class="badge"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></div>
+   <h2 style="font-size:1.6rem">“${esc(item.name)}” is now in Browse Items</h2>
+   <p class="muted" style="margin-top:8px">Other visitors to this demo in your browser can find it, open its details and reserve it. In a live version, hub staff would check the item when you drop it off before it goes on the shelf.</p>
+   <div class="sum-rows" style="margin-top:16px;border-top:1px solid var(--line)">
+    <div class="sum-row"><span>Category</span><span>${CATS[item.cat].name}</span></div>
+    <div class="sum-row"><span>Price per day</span><span class="mono">${money(item.day)}</span></div>
+    <div class="sum-row"><span>Periods</span><span style="text-align:right">${item.periods.map(p=>PERIODS[p].label).join(', ')}</span></div>
+    <div class="sum-row"><span>Drop-off hub</span><span style="text-align:right">${esc(item.hub)}</span></div>
+   </div>
+   <div class="hero-actions"><button class="btn btn-primary" data-item="${item.id}">View your listing</button><button class="btn btn-ghost" id="lendAgain">List another item</button></div>`;
+  window.scrollTo({top:0});toast('Demo listing added to Browse Items');
+});
+$('#lendDone').addEventListener('click',e=>{if(e.target.id==='lendAgain'){$('#lendForm').reset();['lName','lDesc','lDay','lDep','lOwner','lEmail'].forEach(id=>setErr(id,''));$('#lendDone').hidden=true;$('#lendForm').hidden=false;renderLendPreview();window.scrollTo({top:0})}});
+function renderMyListings(){
+  const mine=ITEMS.filter(i=>i.user);const box=$('#myListings');
+  if(!mine.length){box.innerHTML='';return}
+  box.innerHTML=`<h3 style="font-size:1.2rem">Your demo listings</h3><p class="muted" style="font-size:.86rem">Saved only in this browser.</p>
+  <div class="res-list">${mine.map(it=>`<div class="res-row"><div><b>${esc(it.name)}</b><span class="muted">${CATS[it.cat].name} · ${money(it.day)} / day</span></div><div style="display:flex;gap:10px;align-items:center"><button class="linkbtn" data-item="${it.id}">View</button><button class="linkbtn" data-unlist="${it.id}">Remove</button></div></div>`).join('')}</div>`;
+}
+$('#myListings').addEventListener('click',e=>{
+  const id=e.target.dataset.unlist;if(!id)return;
+  const i=ITEMS.findIndex(x=>x.id===id);if(i>-1)ITEMS.splice(i,1);
+  saveListings();buildItemOptions();renderHome();renderMyListings();renderSummary();toast('Demo listing removed');
+});
+function loadListings(){store.get(LKEY,[]).forEach(x=>{if(x&&x.id&&x.user&&CATS[x.cat]&&!byId(x.id)&&Array.isArray(x.periods)&&x.periods.length){x.art='parcel';ITEMS.push(x)}})}
+
+/* ---------- About ---------- */
+function renderSavings(){
+  const pick=['micro','camera','calc','skeleton','tablet','draft'].map(byId);
+  $('#savingsTable').innerHTML=`<thead><tr><th>Item</th><th>Faculty</th><th class="num">Buy new (est.)</th><th class="num">Rent 1 week</th><th class="num">You save</th></tr></thead><tbody>${pick.map(it=>{const r=price(it,'w1');return `<tr><td>${esc(it.name)}</td><td>${CATS[it.cat].name}</td><td class="num">${money(it.buy)}</td><td class="num">${money(r)}</td><td class="num save-pct">${Math.round((1-r/it.buy)*100)}%</td></tr>`}).join('')}</tbody>`;
+}
+
+/* ---------- Contact ---------- */
+$('#contactForm').addEventListener('submit',e=>{
+  e.preventDefault();let bad=null;
+  const n=$('#cName').value.trim(),m=$('#cEmail').value.trim(),msg=$('#cMsg').value.trim();
+  if(n.length<2){setErr('cName','Enter your name.');bad=bad||$('#cName')}else setErr('cName','');
+  if(!emailOK(m)){setErr('cEmail','Enter a valid email address.');bad=bad||$('#cEmail')}else setErr('cEmail','');
+  if(msg.length<10){setErr('cMsg','Write a message of at least 10 characters.');bad=bad||$('#cMsg')}else setErr('cMsg','');
+  if(bad){bad.focus();return}
+  $('#contactForm').hidden=true;const d=$('#contactDone');d.hidden=false;
+  d.innerHTML=`<div class="badge"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></div><h2 style="font-size:1.5rem">Thanks, ${esc(n.split(' ')[0])}</h2><p class="muted" style="margin-top:8px">Your message about “${esc($('#cTopic').value)}” passed all checks. In this prototype it is not sent anywhere; a live version would reply to ${esc(m)} within two working days.</p><div class="hero-actions"><button class="btn btn-ghost" id="cAgain">Write another message</button></div>`;
+});
+$('#contactDone').addEventListener('click',e=>{if(e.target.id==='cAgain'){$('#contactForm').reset();$('#contactForm').hidden=false;$('#contactDone').hidden=true}});
+$('#copyMail').addEventListener('click',()=>{const t=$('#mailText').textContent;try{navigator.clipboard.writeText(t).then(()=>toast('Email copied'),()=>selectMail())}catch(e){selectMail()}});
+function selectMail(){const r=document.createRange();r.selectNodeContents($('#mailText'));const s=getSelection();s.removeAllRanges();s.addRange(r);toast('Email selected, press Ctrl+C to copy')}
+
+/* ---------- Global clicks ---------- */
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-go],[data-item],[data-reserve],[data-cat],[data-chip],[data-close],#emptyReset');if(!t)return;
+  if(t.id==='emptyReset'){resetFilters();return}
+  if(t.dataset.close!==undefined){closeDetail();return}
+  if(t.dataset.reserve){startReserve(t.dataset.reserve);return}
+  if(t.dataset.item){openDetail(t.dataset.item);return}
+  if(t.dataset.chip){setCat(t.dataset.chip);return}
+  if(t.dataset.cat){state.cat=t.dataset.cat;go('browse');return}
+  if(t.dataset.go){closeDetail();go(t.dataset.go)}
+});
+$('#menuBtn').addEventListener('click',e=>{const n=$('#mainNav');n.classList.toggle('open');e.currentTarget.setAttribute('aria-expanded',n.classList.contains('open'))});
+
+/* ---------- Init ---------- */
+loadListings();buildItemOptions();
+renderHome();renderSavings();fillPeriods();renderMyRes();renderMyListings();renderLendPreview();
+show(location.hash.slice(1)||'home',{scroll:false});
+})();
+</script>
+
+</body></html>
